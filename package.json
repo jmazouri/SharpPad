@@ -1,0 +1,44 @@
+{
+    "name": "sharppad",
+    "displayName": "SharpPad",
+    "description": "Test snippets of C# code directly from your editor!",
+    "version": "0.0.1",
+    "publisher": "jmazouri",
+    "engines": {
+        "vscode": "^1.17.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onLanguage:csharp"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.showSharpPad",
+                "title": "Show SharpPad"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.5.3",
+        "vscode": "^1.1.5",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "@types/express": "^4.0.37",
+        "body-parser": "^1.18.2",
+        "express": "^4.16.2",
+        "he": "^1.1.1"
+    }
+}
