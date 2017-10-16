@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SharpPad
 {
-    public class RawValueContainer
+    internal class RawValueContainer
     {
         [JsonProperty("$value")]
         private object _raw;

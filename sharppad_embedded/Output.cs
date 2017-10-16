@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace SharpPad
@@ -33,7 +34,7 @@ namespace SharpPad
         {
             string serialized;
 
-            if (input.GetType().IsValueType)
+            if (input.GetType().GetTypeInfo().IsValueType)
             {
                 serialized = JsonConvert.SerializeObject(new RawValueContainer(input), Settings);
             }
