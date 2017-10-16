@@ -11,6 +11,8 @@ namespace SharpPad
     public static class Output
     {
         private static readonly JsonSerializerSettings Settings;
+        public static int Port { get; set; } = 5255;
+
         static Output()
         {
             Settings = new JsonSerializerSettings
@@ -18,7 +20,7 @@ namespace SharpPad
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 DateFormatHandling = DateFormatHandling.IsoDateFormat,
                 NullValueHandling = NullValueHandling.Include,
-                TypeNameHandling = TypeNameHandling.None
+                TypeNameHandling = TypeNameHandling.All
             };
 
             Settings.Converters.Add(new StringEnumConverter());
@@ -29,12 +31,31 @@ namespace SharpPad
         /// </summary>
         public static async Task Dump<T>(this T input)
         {
-            string serialized = JsonConvert.SerializeObject(new RawValueContainer(input), Settings);
+            string serialized;
+
+            if (input.GetType().IsValueType)
+            {
+                serialized = JsonConvert.SerializeObject(new RawValueContainer(input), Settings);
+            }
+            else
+            {
+                serialized = JsonConvert.SerializeObject(input, Settings);
+            }
 
             var content = new StringContent(serialized);
             content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-            await HttpHelper.Client.PostAsync("http://localhost:5255", content);
+            try
+            {
+                await HttpHelper.Client.PostAsync("http://localhost:" + Port, content);
+            }
+            catch (HttpRequestException)
+            {
+                string msg = $"Unable to contact local SharpPad server. Please ensure \"Output.Port\" is correct (currently {Port}).";
+                Console.WriteLine(msg);
+
+                throw;
+            }
         }
 
         /// <summary>

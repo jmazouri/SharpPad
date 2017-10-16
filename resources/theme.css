@@ -1,0 +1,157 @@
+body,html
+{
+    margin: 0;
+    padding: 0;
+}
+
+*
+{
+    font-size: 14px;
+    font-family: Consolas, 'Courier New', monospace;
+}
+
+table
+{
+    width: calc(100% - 13px);
+}
+
+h1,h2,h3,h4,h5,h6
+{
+    margin: 0;
+    padding: 0;
+}
+
+header
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    padding: 0.5em;
+    
+    width: calc(100% - 13px);
+    background-color: var(--headerBg);    
+}
+
+header, header * 
+{
+    font-size: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "HelveticaNeue-Light", "Ubuntu", "Droid Sans", sans-serif;
+}
+
+header button
+{
+    cursor: pointer;
+
+    padding: 1px 6px 1px 6px;
+    background-color: #0e639c;
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+}
+
+header button:hover
+{
+    background-color: #1177bb;
+}
+
+header button:focus
+{
+    outline: none;
+}
+
+.dumpContainer
+{
+    margin-top: 2em;
+}
+
+.clickable
+{
+    cursor: pointer;
+}
+
+.dump
+{
+    padding: 0.5em;
+    border-bottom: 2px solid var(--dumpBorder);
+}
+
+.time
+{
+    font-size: 0.85em;
+    text-align: right;
+}
+
+th,td
+{
+    padding: 0;
+    text-align: left;
+    vertical-align: text-top;
+}
+
+td.equals
+{
+    vertical-align: top;
+    padding-right: 0.9em;
+}
+
+.object .collapse
+{
+    text-align: right;
+}
+
+table .object > table
+{
+    background: rgb(45, 45, 48);
+    border: 1px solid var(--collectionBorder);
+
+    margin: 0 0 0.25em 0;
+    padding: 0.33em;
+}
+
+.propName
+{
+    text-align: left;
+    padding-right: 0.75em;
+    color: var(--propName);
+    
+    vertical-align: top;
+}
+
+.count
+{
+    font-weight: normal;
+    font-size: 0.85em;
+}
+
+.typeName
+{
+    color: var(--typeName);
+
+    font-weight: normal;
+    font-family: "Consolas", monospace;
+}
+
+.raw
+{
+    display: inline-block;
+}
+
+.raw.string
+{
+    color: var(--string);
+}
+
+.raw.number
+{
+    color: var(--number);
+}
+
+.raw.null
+{
+    color: var(--null);
+}

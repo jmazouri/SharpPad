@@ -1,4 +1,5 @@
 export default interface IFormatProvider
 {
-    formatToHtml(): string
+    date: Date;
+    formatToHtml(): string;
 }

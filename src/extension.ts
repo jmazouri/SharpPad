@@ -1,65 +1,75 @@
 'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+
 import * as vscode from 'vscode';
-import * as Express from 'express';
-import { Server } from 'http';
 import DataFormatter from './formatters/DataFormatter'
+import SharpPadServer from './SharpPadServer'
+import Config from './Config'
 
 import PadViewContentProvider from './padview';
+
 let provider = new PadViewContentProvider();
-
-const app: Express.Application = Express();
-app.use((<any>Express).json());
-
-let server: Server;
-
-app.post('/', function (req, res)
-{
-    provider.addAndUpdate(previewUri, DataFormatter.getFormatter(req.body));
-
-    res.status(200).end();
-});
-
 let previewUri = vscode.Uri.parse('sharppad://authority/sharppad');
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+let config: Config;
+let server: SharpPadServer;
 
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
+function showWindow(success = (_) => {})
+{
+    vscode.commands
+        .executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'SharpPad')
+        .then(success, (reason) => vscode.window.showErrorMessage(reason));
+}
+
+function loadConfig()
+{
+    config = new Config(vscode.workspace.getConfiguration('sharppad'));
+}
+
+function startServer()
+{
+    server = new SharpPadServer(config.listenServerPort, dump => 
+    {   
+        provider.addAndUpdate(previewUri, DataFormatter.getFormatter(dump));
+        showWindow();
+    });
+}
+
+function restartServer()
+{
+    if (server)
+    {
+        server.close(done => startServer());
+    }
+}
+
+export function activate(context: vscode.ExtensionContext)
+{
     console.log('Congratulations, your extension "sharppad" is now active!');
 
-    server = app.listen(5255, function ()
-    {
-        console.log('Example app listening on port 5255!');
-    });
+    loadConfig();
+    startServer();
 
     vscode.debug.onDidStartDebugSession(session =>
     {
-        vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'SharpPad').then((success) =>{
-        }, (reason) => {
-            vscode.window.showErrorMessage(reason);
-        });
-
         provider.clear(previewUri, "Waiting for dump output...");
     });
 
-    let stopDebug = vscode.debug.onDidTerminateDebugSession(session =>
+    vscode.workspace.onDidChangeConfiguration(params =>
     {
-        /*
-        if (!contentBuild)
-        {
-            provider.clear(previewUri, "No output captured.<br>Remember to install & use the <strong>SharpPad</strong> NuGet package.");
-        }*/
+        loadConfig();
+        restartServer();
+    });
 
-        //provider.clear(previewUri);
+    var disposable = vscode.commands.registerCommand('sharppad.showSharpPad', () =>
+    {
+        showWindow();
     });
 
     let registration = vscode.workspace.registerTextDocumentContentProvider('sharppad', provider);
 
-    context.subscriptions.push(registration);
+    context.subscriptions.push(registration, disposable);
+
+    vscode.debug.startDebugging(vscode.workspace.workspaceFolders[0], ".NET Core Launch (console)");
 }
 
 // this method is called when your extension is deactivated

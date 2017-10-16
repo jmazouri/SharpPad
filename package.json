@@ -15,10 +15,21 @@
     ],
     "main": "./out/extension",
     "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "SharpPad configuration",
+            "properties": {
+                "sharppad.listenServerPort": {
+                    "type": "number",
+                    "default": 5255,
+                    "description": "The port for the SharpPad HTTP server to listen on."
+                }
+            }
+        },
         "commands": [
             {
-                "command": "extension.showSharpPad",
-                "title": "Show SharpPad"
+                "command": "sharppad.showSharpPad",
+                "title": "Show SharpPad window"
             }
         ]
     },
