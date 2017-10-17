@@ -29,6 +29,10 @@ namespace SharpPad
             Settings.Converters.Add(new StringEnumConverter());
         }
 
+        /// <summary>
+        /// Dump a ValueTuple with correct field names to the output window.
+        /// </summary>
+        /// <param name="input">The method that returns the tuple to dump.</param>
         public static async Task DumpTuple<T>(Func<T> input) where T : struct
         {
             var tupleResult = input.Invoke();
@@ -42,7 +46,11 @@ namespace SharpPad
             for (int i = 0; i < tupleNames.Count; i++)
             {
                 string name = (tupleNames[i] == null ? $"Item{i + 1}" : tupleNames[i]);
-                tupleObject[name] = JToken.FromObject(tupleFields[i].GetValue(tupleResult));
+                
+                if (i < tupleFields.Length)
+                {
+                    tupleObject[name] = JToken.Parse(JsonConvert.SerializeObject(tupleFields[i].GetValue(tupleResult), Settings));
+                }
             }
 
             await Dump(tupleObject);
@@ -55,7 +63,7 @@ namespace SharpPad
         {
             string serialized;
 
-            if (input.GetType().GetTypeInfo().IsPrimitive)
+            if (input.GetType().GetTypeInfo().IsPrimitive || input is string)
             {
                 serialized = JsonConvert.SerializeObject(new RawValueContainer(input), Settings);
             }

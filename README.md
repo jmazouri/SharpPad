@@ -1,65 +1,62 @@
-# sharppad README
+# SharpPad
 
-This is the README for your extension "sharppad". After writing up a brief description, we recommend including the following sections.
+SharpPad is an extension for Visual Studio Code that allows you easily inspect the results of your code. It works similarly to standalone tools like LinqPad and RoslynPad. 
+
+```csharp
+class Foo
+{
+    public string Name {get; set;}
+    public decimal Money {get; set;}
+    public DateTime Date {get; set;}
+}
+
+var foo = new Foo
+{
+    Name = "John",
+    Money = 12345.66m,
+    Date = DateTime.Now
+};
+
+await foo.Dump();
+```
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Dump nearly anything
+    - Classes
+    - Structs
+    - Anonymous Types
+    - ValueTuples*
+    - Regular Tuples
+    - Primitive Types
 
-For example if there is an image subfolder under your extension project workspace:
+> *ValueTuple support is still quite early; named tuple fields only work correctly at the first layer of nesting, and the special `DumpTuple` method is required for even that
 
-\!\[feature X\]\(images/feature-x.png\)
+## How it Works
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+SharpPad runs a listening HTTP server in your editor. When you call `Dump()` from your code, a request is made to this webserver containing the serialized form of your data. The extension formats this request, and presents it.
 
-## Requirements
+This means SharpPad requires an open port on your machine - it defaults to `5255`, and can be adjusted in VSCode via the `sharppad.listenServerPort` configuration option, and in your code via the static `SharpPad.Output.Port` property.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## How to Use
 
-## Extension Settings
+Install the extension via the VSCode marketplace, and install the `SharpPad` extension into your project via NuGet. Throw in a `using SharpPad;` at the start of your class, and `Dump()` away!
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+## Troubleshooting/Notes
 
-For example:
+SharpPad, by default, uses its own static HttpClient instance and is entirely asynchronous. If you're using the newer versions of Roslyn, you can switch your project to C# 7.1 to take advantage of `async Main` for smaller/test projects. If you really need a synchronous version, `DumpBlocking` is available - but not recommended.
 
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+If you'd like to use SharpPad as an output window for your program without running it through VSCode, use the `Show SharpPad` command from the Command Palette.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
+- Initial release
 
-### 1.0.1
+## Hopeful Features
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- Better ValueTuple support
+- More language-agnostic implementation (to support languages other than C#)
+- More Dump options/inputs (titles, grouping, etc)
+- Allow dumping raw HTML (works now but not intentionally)

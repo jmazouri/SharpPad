@@ -11,7 +11,8 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:csharp"
+        "onLanguage:csharp",
+        "onCommand:sharppad.showSharpPad"
     ],
     "main": "./out/extension",
     "contributes": {

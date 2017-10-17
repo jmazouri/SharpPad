@@ -30,7 +30,11 @@ function startServer()
     server = new SharpPadServer(config.listenServerPort, dump => 
     {   
         provider.addAndUpdate(previewUri, DataFormatter.getFormatter(dump));
-        showWindow();
+        
+        if (vscode.debug.activeDebugSession !== undefined)
+        {
+            showWindow();
+        }
     });
 }
 
@@ -69,7 +73,7 @@ export function activate(context: vscode.ExtensionContext)
 
     context.subscriptions.push(registration, disposable);
 
-    vscode.debug.startDebugging(vscode.workspace.workspaceFolders[0], ".NET Core Launch (console)");
+    //vscode.debug.startDebugging(vscode.workspace.workspaceFolders[0], ".NET Core Launch (console)");
 }
 
 // this method is called when your extension is deactivated

@@ -9,7 +9,7 @@ export default class RawFormatProvider implements IFormatProvider
 
     constructor(rawData: any)
     {
-        if (!rawData)
+        if (rawData === null || rawData === undefined)
         {
             this._rawData = null;
         }

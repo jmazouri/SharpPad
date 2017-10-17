@@ -4,6 +4,8 @@ import RawFormatProvider from './RawFormatProvider'
 import ArrayFormatProvider from './ArrayFormatProvider'
 import GridFormatProvider from './GridFormatProvider'
 
+import TypeNameParser from '../parsers/TypeNameParser'
+
 export default class DataFormatter
 {
     static getFormatter(target: any): IFormatProvider
@@ -27,7 +29,7 @@ export default class DataFormatter
                     ret = new ArrayFormatProvider(target);
                 }
             }
-            else if (target.$type)
+            else if (target.$type && TypeNameParser.parse(target.$type).typeName != "RawValueContainer")
             {
                 ret = new ObjectFormatProvider(target);
             }
