@@ -2,9 +2,11 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace SharpPad
@@ -27,6 +29,25 @@ namespace SharpPad
             Settings.Converters.Add(new StringEnumConverter());
         }
 
+        public static async Task DumpTuple<T>(Func<T> input) where T : struct
+        {
+            var tupleResult = input.Invoke();
+
+            var tupleNames = input.GetMethodInfo().ReturnParameter.GetCustomAttribute<TupleElementNamesAttribute>().TransformNames;
+            var tupleFields = tupleResult.GetType().GetRuntimeFields().ToArray();
+
+            JObject tupleObject = new JObject();
+            tupleObject["$type"] = tupleResult.GetType().FullName;
+
+            for (int i = 0; i < tupleNames.Count; i++)
+            {
+                string name = (tupleNames[i] == null ? $"Item{i + 1}" : tupleNames[i]);
+                tupleObject[name] = JToken.FromObject(tupleFields[i].GetValue(tupleResult));
+            }
+
+            await Dump(tupleObject);
+        }
+
         /// <summary>
         /// Dumps to the output window.
         /// </summary>
@@ -34,7 +55,7 @@ namespace SharpPad
         {
             string serialized;
 
-            if (input.GetType().GetTypeInfo().IsValueType)
+            if (input.GetType().GetTypeInfo().IsPrimitive)
             {
                 serialized = JsonConvert.SerializeObject(new RawValueContainer(input), Settings);
             }
@@ -43,6 +64,11 @@ namespace SharpPad
                 serialized = JsonConvert.SerializeObject(input, Settings);
             }
 
+            await SendContent(serialized);
+        }
+
+        private static async Task SendContent(string serialized)
+        {
             var content = new StringContent(serialized);
             content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 

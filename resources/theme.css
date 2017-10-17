@@ -96,6 +96,7 @@ th,td
 td.equals
 {
     vertical-align: top;
+    text-align: right;
     padding-right: 0.9em;
 }
 

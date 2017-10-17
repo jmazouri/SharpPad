@@ -3,7 +3,7 @@ import TypeName from './TypeName';
 const typenameRegex = /.*(?=,)/;
 
 const genericTypeNameRegex = /.*(?=`)/;
-const typeParamRegex = /(?:(?!\[).)+?(?=, )/g;
+const typeParamRegex = /\[.+?(?=,)/g;
 
 export default class TypeNameParser
 {
@@ -14,10 +14,18 @@ export default class TypeNameParser
 
         if (ret.rawTypeName.indexOf('`') > -1)
         {
-            let genericMatch = input.match(typeParamRegex).slice(0, -1);
+            let genericMatch = input.match(typeParamRegex);
 
-            ret.fullTypeName = input.match(genericTypeNameRegex)[0];
-            ret.typeParameters = genericMatch;
+            if (input.indexOf("__AnonymousType") > -1)
+            {
+                ret.fullTypeName = "AnonymousType";
+            }
+            else
+            {
+                ret.fullTypeName = input.match(genericTypeNameRegex)[0];
+            }
+
+            ret.typeParameters = genericMatch.map(param => param.replace('[', ''));
         }
         else
         {
