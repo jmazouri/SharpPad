@@ -29,6 +29,7 @@ await foo.Dump();
     - ValueTuples*
     - Regular Tuples
     - Primitive Types
+    - Collections of the above
 
 > *ValueTuple support is still quite early; named tuple fields only work correctly at the first layer of nesting, and the special `DumpTuple` method is required for even that. Collections of named tuples are also not supported, and may never be.
 
@@ -40,7 +41,7 @@ This means SharpPad requires an open port on your machine - it defaults to `5255
 
 ## How to Use
 
-Install the extension via the VSCode marketplace, and install the `SharpPad` extension into your project via NuGet. Throw in a `using SharpPad;` at the start of your class, and `Dump()` away!
+Install the extension via the VSCode marketplace, and install the `SharpPad` package into your project via NuGet. Throw in a `using SharpPad;` at the start of your class, and `Dump()` away!
 
 ## Troubleshooting/Notes
 

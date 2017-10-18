@@ -64,6 +64,11 @@ header button:focus
     outline: none;
 }
 
+header .right
+{
+    display: flex;
+}
+
 .dumpContainer
 {
     margin-top: 2em;

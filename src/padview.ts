@@ -68,7 +68,12 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
             builder += `<link rel='stylesheet' href='${css}'>`;
         }
 
-        builder += `<header><div>${this._formatters.length} entries</div><button class='toggleAll'>Toggle All</button></header><div class='dumpContainer'>`;
+        builder += `<header>
+            <div>${this._formatters.length} entries</div>
+            <div class="right">
+                <button class='toggleAll'>Toggle All</button>
+            </div>
+        </header><div class='dumpContainer'>`;
 
         if (this._formatters.length > 0)
         {

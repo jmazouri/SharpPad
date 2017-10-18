@@ -10,20 +10,20 @@ export default class DataFormatter
 {
     static getFormatter(target: any): IFormatProvider
     {
-        if (target.$type)
-        {
-            let type = TypeNameParser.parse(target.$type);
-
-            if (type.typeName == "DumpContainer")
-            {
-                return DataFormatter.getFormatter(target.$value);
-            }
-        }
-
         let ret: IFormatProvider = new RawFormatProvider(target);
-
+        
         if (target != null)
         {
+            if (target.$type)
+            {
+                let type = TypeNameParser.parse(target.$type);
+    
+                if (type.typeName == "DumpContainer")
+                {
+                    return DataFormatter.getFormatter(target.$value);
+                }
+            }
+
             if (target.$values)
             {
                 if (target.$values.length > 0 && target.$values[0].$type)
