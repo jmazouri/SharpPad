@@ -1,7 +1,6 @@
 import TypeName from './TypeName';
 
 const typenameRegex = /.*(?=,)/;
-
 const genericTypeNameRegex = /.*(?=`)/;
 const typeParamRegex = /\[.+?(?=,)/g;
 

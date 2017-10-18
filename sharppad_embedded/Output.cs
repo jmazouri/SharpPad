@@ -40,12 +40,14 @@ namespace SharpPad
             var tupleNames = input.GetMethodInfo().ReturnParameter.GetCustomAttribute<TupleElementNamesAttribute>().TransformNames;
             var tupleFields = tupleResult.GetType().GetRuntimeFields().ToArray();
 
-            JObject tupleObject = new JObject();
-            tupleObject["$type"] = tupleResult.GetType().FullName;
+            JObject tupleObject = new JObject
+            {
+                ["$type"] = tupleResult.GetType().FullName
+            };
 
             for (int i = 0; i < tupleNames.Count; i++)
             {
-                string name = (tupleNames[i] == null ? $"Item{i + 1}" : tupleNames[i]);
+                string name = (tupleNames[i] ?? $"Item{i + 1}");
                 
                 if (i < tupleFields.Length)
                 {
@@ -59,18 +61,15 @@ namespace SharpPad
         /// <summary>
         /// Dumps to the output window.
         /// </summary>
-        public static async Task Dump<T>(this T input)
+        public static async Task Dump<T>(this T input, string title = null)
         {
             string serialized;
 
-            if (input.GetType().GetTypeInfo().IsPrimitive || input is string)
+            serialized = JsonConvert.SerializeObject(new DumpContainer()
             {
-                serialized = JsonConvert.SerializeObject(new RawValueContainer(input), Settings);
-            }
-            else
-            {
-                serialized = JsonConvert.SerializeObject(input, Settings);
-            }
+                Title = title,
+                Value = input
+            }, Settings);
 
             await SendContent(serialized);
         }

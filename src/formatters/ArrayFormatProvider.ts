@@ -22,20 +22,12 @@ export default class ArrayFormatProvider implements IFormatProvider
 
     formatToHtml(): string
     {
-        let build = 
-            `<table>`;
+        let build = `<table>`;
 
         let formatted = this._targetArr.map(e => DataFormatter.getFormatter(e).formatToHtml());
         let joined = formatted.join(', ');
 
-        if (formatted.length > 25 || joined.length > 250)
-        {
-            build += '<tr><td>' + formatted.join('</td></tr><tr><td>') + '</tr></td>';
-        }
-        else
-        {
-            build += `<tr><td>{${joined}}</td></tr>`;
-        }
+        build += `<tr><td>{${joined}}</td></tr>`
 
         build += "</table>";
 

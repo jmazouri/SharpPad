@@ -10,13 +10,19 @@ export default class DataFormatter
 {
     static getFormatter(target: any): IFormatProvider
     {
+        if (target.$type)
+        {
+            let type = TypeNameParser.parse(target.$type);
+
+            if (type.typeName == "DumpContainer")
+            {
+                return DataFormatter.getFormatter(target.$value);
+            }
+        }
+
         let ret: IFormatProvider = new RawFormatProvider(target);
 
-        if (target == null)
-        {
-            ret = new RawFormatProvider(target);
-        }
-        else
+        if (target != null)
         {
             if (target.$values)
             {
@@ -29,7 +35,7 @@ export default class DataFormatter
                     ret = new ArrayFormatProvider(target);
                 }
             }
-            else if (target.$type && TypeNameParser.parse(target.$type).typeName != "RawValueContainer")
+            else if (target.$type)
             {
                 ret = new ObjectFormatProvider(target);
             }

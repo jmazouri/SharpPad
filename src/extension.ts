@@ -27,6 +27,8 @@ function loadConfig()
 
 function startServer()
 {
+    loadConfig();
+
     server = new SharpPadServer(config.listenServerPort, dump => 
     {   
         provider.addAndUpdate(previewUri, DataFormatter.getFormatter(dump));
@@ -49,8 +51,7 @@ function restartServer()
 export function activate(context: vscode.ExtensionContext)
 {
     console.log('Congratulations, your extension "sharppad" is now active!');
-
-    loadConfig();
+    
     startServer();
 
     vscode.debug.onDidStartDebugSession(session =>
@@ -60,7 +61,6 @@ export function activate(context: vscode.ExtensionContext)
 
     vscode.workspace.onDidChangeConfiguration(params =>
     {
-        loadConfig();
         restartServer();
     });
 

@@ -30,7 +30,7 @@ await foo.Dump();
     - Regular Tuples
     - Primitive Types
 
-> *ValueTuple support is still quite early; named tuple fields only work correctly at the first layer of nesting, and the special `DumpTuple` method is required for even that
+> *ValueTuple support is still quite early; named tuple fields only work correctly at the first layer of nesting, and the special `DumpTuple` method is required for even that. Collections of named tuples are also not supported, and may never be.
 
 ## How it Works
 
