@@ -23,7 +23,9 @@ namespace SharpPad
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 DateFormatHandling = DateFormatHandling.IsoDateFormat,
                 NullValueHandling = NullValueHandling.Include,
-                TypeNameHandling = TypeNameHandling.All
+                TypeNameHandling = TypeNameHandling.All,
+                //This is the default; but we want to be explicit
+                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
             };
 
             Settings.Converters.Add(new StringEnumConverter());

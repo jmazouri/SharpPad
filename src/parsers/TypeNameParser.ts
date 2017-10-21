@@ -2,33 +2,32 @@ import TypeName from './TypeName';
 
 const typenameRegex = /.*(?=,)/;
 const genericTypeNameRegex = /.*(?=`)/;
-const typeParamRegex = /\[.+?(?=,)/g;
+const typeParamRegex = /\[.*?]/g;
 
 export default class TypeNameParser
 {
     static parse(input: string): TypeName
     {
         let ret: TypeName = new TypeName();
-        ret.rawTypeName = input;
+        ret.assemblyQualifiedName = input;
 
-        if (ret.rawTypeName.indexOf('`') > -1)
+        if (ret.assemblyQualifiedName.indexOf('`') > -1)
         {
-            let genericMatch = input.match(typeParamRegex);
-
             if (input.indexOf("__AnonymousType") > -1)
             {
-                ret.fullTypeName = "AnonymousType";
+                ret.namespacedTypeName = "AnonymousType";
             }
             else
             {
-                ret.fullTypeName = input.match(genericTypeNameRegex)[0];
+                ret.namespacedTypeName = input.match(genericTypeNameRegex)[0];
             }
 
-            ret.typeParameters = genericMatch.map(param => param.replace('[', ''));
+            let genericMatch = input.match(typeParamRegex);
+            ret.typeParameters = genericMatch.map(param => TypeNameParser.parse(param.replace(/\[/g, '')));
         }
         else
         {
-            ret.fullTypeName = input.match(typenameRegex)[0];
+            ret.namespacedTypeName = input.match(typenameRegex)[0];
         }
 
         return ret;
