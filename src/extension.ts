@@ -33,6 +33,11 @@ function startServer()
     {   
         provider.addAndUpdate(previewUri, DataFormatter.getFormatter(dump));
         
+        /*
+            If the debugger is running, try to show a new SharpPad window when
+            we get a new dump request. We don't do this every time because VSCode
+            will blindly create duplicate windows.
+        */
         if (vscode.debug.activeDebugSession !== undefined)
         {
             showWindow();
@@ -54,16 +59,19 @@ export function activate(context: vscode.ExtensionContext)
     
     startServer();
 
+    //clear the window when a new debug session starts
     vscode.debug.onDidStartDebugSession(session =>
     {
         provider.clear(previewUri, "Waiting for dump output...");
     });
 
+    //Restart the server when the config changes - to catch the new port number
     vscode.workspace.onDidChangeConfiguration(params =>
     {
         restartServer();
     });
 
+    //Register the command to manually show the SharpPad window, for arbitrary dumping
     var disposable = vscode.commands.registerCommand('sharppad.showSharpPad', () =>
     {
         showWindow();

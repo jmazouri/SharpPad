@@ -11,10 +11,6 @@ export default class SharpPadServer
     constructor(port: number, onDump: (dump: any) => any)
     {
         this._onDump = onDump;
-        
-        //The Express typings don't include the json middleware from the newest version,
-        //so we bypass it a bit
-
         this._server = http.createServer((req, res) => this.handleRequest(req, res));
 
         let self = this;

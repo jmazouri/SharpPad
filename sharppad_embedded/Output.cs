@@ -23,11 +23,14 @@ namespace SharpPad
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 DateFormatHandling = DateFormatHandling.IsoDateFormat,
                 NullValueHandling = NullValueHandling.Include,
+
+                //Turn this on to get type names in our json
                 TypeNameHandling = TypeNameHandling.All,
                 //This is the default; but we want to be explicit
                 TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
             };
 
+            //We want nice enum names in our json
             Settings.Converters.Add(new StringEnumConverter());
         }
 
@@ -37,6 +40,7 @@ namespace SharpPad
         /// <param name="input">The method that returns the tuple to dump.</param>
         public static async Task DumpTuple<T>(Func<T> input) where T : struct
         {
+            //I hate ValueTuples
             var tupleResult = input.Invoke();
 
             var tupleNames = input.GetMethodInfo().ReturnParameter.GetCustomAttribute<TupleElementNamesAttribute>().TransformNames;

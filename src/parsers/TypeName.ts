@@ -1,19 +1,32 @@
 export default class TypeName
 {
     assemblyQualifiedName: string;
-    namespacedTypeName: string;
-
-    get typeName(): string
-    {
-        return TypeName.getTypeWithoutNamespace(this.namespacedTypeName);
-    }
-
     typeParameters: TypeName[] = [];
 
-    static getTypeWithoutNamespace(input: string)
+    _namespacedTypeName: string;
+    get namespacedTypeName(): string
     {
-        let split = input.split('.');
-        return split[split.length - 1];
+        return this._namespacedTypeName;
+    }
+
+    /*
+        TODO: Improve this; make entire type immutable?
+        
+        Update the backing field for the typeName property
+        when the namespacedTypeName is changed
+    */
+    set namespacedTypeName(value: string)
+    {
+        this._namespacedTypeName = value;
+        
+        let split = value.split('.');
+        this._typeName = split[split.length - 1];
+    }
+
+    private _typeName: string;
+    get typeName(): string
+    {
+        return this._typeName;
     }
 
     public toString() : string
