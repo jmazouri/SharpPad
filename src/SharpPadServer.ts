@@ -1,11 +1,9 @@
 import * as vscode from 'vscode';
-import * as Express from 'express';
-import { Server } from 'http';
+import * as http from 'http';
 
 export default class SharpPadServer
 {
-    private _app: Express.Application = Express();
-    private _server: Server;
+    private _server: http.Server;
     private _onDump: (dump: any) => any;
 
     private _statusBarMessage: vscode.StatusBarItem;
@@ -16,12 +14,11 @@ export default class SharpPadServer
         
         //The Express typings don't include the json middleware from the newest version,
         //so we bypass it a bit
-        this._app.use((<any>Express).json());
-        this._app.post('/', (req, res) => this.handleRequest(req, res));
+
+        this._server = http.createServer((req, res) => this.handleRequest(req, res));
 
         let self = this;
-
-        this._server = this._app.listen(port, function ()
+        this._server.listen(port, function ()
         {
             self._statusBarMessage = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 0);
             self._statusBarMessage.text = `SharpPad:${port}`;
@@ -40,9 +37,22 @@ export default class SharpPadServer
         this._server.close(() => whenDone());
     }
     
-    private handleRequest(req, res)
+    private handleRequest(req: http.IncomingMessage, res: http.ServerResponse)
     {
-        this._onDump(req.body);
-        res.status(200).end();
+        let self = this;
+        let body = [];
+        
+        req.on('data', (chunk) =>
+        {
+            body.push(chunk);
+        })
+        .on('end', () =>
+        {
+            let content = Buffer.concat(body).toString();
+            self._onDump(JSON.parse(content));
+
+            res.statusCode = 200;
+            res.end();
+        });
     }
 }
