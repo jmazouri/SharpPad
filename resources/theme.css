@@ -40,7 +40,7 @@ header
 header, header * 
 {
     font-size: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "HelveticaNeue-Light", "Ubuntu", "Droid Sans", sans-serif;
+    font-family: var(--sansSerifFont);
 }
 
 header button
@@ -85,10 +85,18 @@ header .right
     border-bottom: 2px solid var(--dumpBorder);
 }
 
+.dumpTitle
+{
+    padding: 0.5em 0.5em 0 0.4em;
+    font-size: 1.25em;
+    font-family: var(--sansSerifFont);
+}
+
 .time
 {
     font-size: 0.85em;
     text-align: right;
+    margin-top: -1.2em;
 }
 
 th,td
@@ -105,10 +113,36 @@ td.equals
     padding-right: 0.9em;
 }
 
+.array
+{
+    /* I hate tables */
+    max-height: 17px;
+    margin: -2px -3px;
+}
+
 .object .collapse
 {
     text-align: right;
 }
+
+.object > table
+{
+    
+}
+
+.object.hidden > table
+{
+    display: inline-block;
+
+    border: none;
+    overflow: hidden;
+
+    padding: 0;
+    margin: 0;
+    
+    height: 0;
+}
+
 
 table .object > table
 {
@@ -116,7 +150,12 @@ table .object > table
     border: 1px solid var(--collectionBorder);
 
     margin: 0 0 0.25em 0;
-    padding: 0.33em;
+    padding: 0.2em 0.33em;
+}
+
+.object tr
+{
+    max-height: 17px;
 }
 
 .propName
@@ -139,7 +178,7 @@ table .object > table
     color: var(--typeName);
 
     font-weight: normal;
-    font-family: "Consolas", monospace;
+    font-family: var(--monoFont);
 }
 
 .raw

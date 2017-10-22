@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 let he = require('he');
 
 import IFormatProvider from './IFormatProvider'
@@ -9,8 +8,6 @@ import TypeName from '../parsers/TypeName'
 
 export default class ArrayFormatProvider implements IFormatProvider
 {
-    public date: Date;
-    
     private _targetArr: Array<any>;
     private _type: TypeName;
 

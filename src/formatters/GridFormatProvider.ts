@@ -7,8 +7,6 @@ import TypeName from '../parsers/TypeName'
 
 export default class GridFormatProvider implements IFormatProvider
 {
-    public date: Date;
-    
     private _objCollection: any;
     private _type: TypeName;
     private _properties: string[] = [];

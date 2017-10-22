@@ -69,9 +69,12 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
         }
 
         builder += `<header>
-            <div>${this._formatters.length} entries</div>
+            <div class="left">
+                <button id='collapseAll'>Collapse All</button>
+                <button id='expandAll'>Expand All</button>
+            </div>
             <div class="right">
-                <button class='toggleAll'>Toggle All</button>
+                <div>${this._formatters.length} entries</div>
             </div>
         </header><div class='dumpContainer'>`;
 
@@ -79,7 +82,7 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
         {
             for (let formatter of this._formatters)
             {
-                builder += `<div class='dump'>${formatter.formatToHtml()}<div class='time'>${formatter.date.toLocaleTimeString()} + ${formatter.date.getMilliseconds()}ms</div></div>`;
+                builder += formatter.formatToHtml();
             }
         }
         else

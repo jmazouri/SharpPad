@@ -7,6 +7,7 @@ namespace SharpPad
 {
     internal class DumpContainer
     {
+        [JsonProperty("title")]
         public string Title { get; set; }
 
         [JsonProperty("$value")]

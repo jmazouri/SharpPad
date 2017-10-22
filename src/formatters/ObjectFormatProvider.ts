@@ -7,7 +7,6 @@ import TypeName from '../parsers/TypeName'
 
 export default class ObjectFormatProvider implements IFormatProvider
 {
-    public date: Date;
     public startCollapsed: boolean = true;
 
     private _targetObj: any;
@@ -23,7 +22,7 @@ export default class ObjectFormatProvider implements IFormatProvider
     {
         let build = `<h4 class='typeName clickable'>
             ${he.encode(this._type.toString())} <span class='collapse'></span>
-        </h4><table style='display: none;'><tbody class='propList'>`;
+        </h4><table><tbody class='propList'>`;
 
         for (var property in this._targetObj)
         {

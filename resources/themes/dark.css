@@ -1,5 +1,8 @@
 :root
 {
+    --sansSerifFont: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "HelveticaNeue-Light", "Ubuntu", "Droid Sans", sans-serif;
+    --monoFont: Consolas, "Courier New", monospace;
+
     --propName: currentColor;
     --typeName: #4ec9b0;
     --string: #ce9178;

@@ -1,34 +1,54 @@
 let collapsables = document.getElementsByClassName("collapse");
 
 for (let collapse of collapsables)
-{
-    let target = collapse.parentElement.parentElement.childNodes[1];
-    let isHidden = target.style.display === 'none';
+{   
     let clickTarget = collapse.parentElement;
+    let isHidden = clickTarget.parentElement.classList.contains('hidden');
 
     setIcon(collapse, !isHidden);
     
-    clickTarget.addEventListener("click", () => toggleCollapse(collapse));
+    clickTarget.addEventListener("click", () => changeVisibility(collapse));
 }
 
-let toggleAll = document.getElementsByClassName("toggleAll")[0];
-toggleAll.addEventListener("click", function()
+let collapseAll = document.getElementById("collapseAll");
+collapseAll.addEventListener("click", function()
 {
     for (let collapse of collapsables)
     {
-        toggleCollapse(collapse);
+        changeVisibility(collapse, false);
     }
 });
 
-function toggleCollapse(collapse)
+let expandAll = document.getElementById("expandAll");
+expandAll.addEventListener("click", function()
 {
-    let target = collapse.parentElement.parentElement.childNodes[1];
-    let isHidden = target.style.display === 'none';
+    for (let collapse of collapsables)
+    {
+        changeVisibility(collapse, true);
+    }
+});
 
-    target.style.display = isHidden ? '' : 'none';
-    setIcon(collapse, isHidden);
-}
+function changeVisibility(collapse, visible)
+{
+    let target = collapse.parentElement.parentElement;
+
+    if (visible == undefined)
+    {
+        visible = target.classList.contains('hidden');
+    }
     
+    if (visible)
+    {
+        target.classList.remove('hidden');
+    }
+    else
+    {
+        target.classList.add('hidden');
+    }
+
+    setIcon(collapse, visible);
+}
+
 function setIcon(collapse, isHidden)
 {
     collapse.innerHTML = isHidden ? '&#9650;' : '&#9660;';

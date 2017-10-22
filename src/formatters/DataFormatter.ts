@@ -3,6 +3,7 @@ import ObjectFormatProvider from './ObjectFormatProvider'
 import RawFormatProvider from './RawFormatProvider'
 import ArrayFormatProvider from './ArrayFormatProvider'
 import GridFormatProvider from './GridFormatProvider'
+import DumpContainerFormatProvider from './DumpContainerFormatProvider'
 
 import TypeNameParser from '../parsers/TypeNameParser'
 
@@ -14,14 +15,8 @@ export default class DataFormatter
         by Json.Net.
     */
     static getFormatter(target: any): IFormatProvider
-    {
-        /*
-            We let RawFormatProvider handle pure null values, or anything else
-            we don't recognize.
-        */
-        let ret: IFormatProvider = new RawFormatProvider(target);
-        
-        if (target != null)
+    {      
+        if (target !== null && target !== undefined)
         {
             /*
                 If the target has a $type property, and it's a DumpContainer, then
@@ -34,7 +29,7 @@ export default class DataFormatter
     
                 if (type.typeName == "DumpContainer")
                 {
-                    return DataFormatter.getFormatter(target.$value);
+                    return new DumpContainerFormatProvider(target);
                 }
             }
 
@@ -48,21 +43,24 @@ export default class DataFormatter
                 */
                 if (target.$values.length > 0 && target.$values[0].$type)
                 {
-                    ret = new GridFormatProvider(target);
+                    return new GridFormatProvider(target);
                 }
                 else
                 {
-                    ret = new ArrayFormatProvider(target);
+                    return new ArrayFormatProvider(target);
                 }
             }
             else if (target.$type)
             {
                 //If it's not an array, but still has a type, it's some other object.
-                ret = new ObjectFormatProvider(target);
+                return new ObjectFormatProvider(target);
             }
         }
 
-        ret.date = new Date();
-        return ret;
+        /*
+            We let RawFormatProvider handle pure null values, or anything else
+            we don't recognize.
+        */
+        return new RawFormatProvider(target);
     }
 }
