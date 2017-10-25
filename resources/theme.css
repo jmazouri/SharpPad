@@ -126,11 +126,6 @@ td.equals
     text-align: right;
 }
 
-.object > table
-{
-    
-}
-
 .object.hidden > table
 {
     display: inline-block;
@@ -200,4 +195,9 @@ table .object > table
 .raw.null
 {
     color: var(--null);
+}
+
+.raw.bool
+{
+    color: var(--bool);
 }

@@ -39,6 +39,11 @@ export default class RawFormatProvider implements IFormatProvider
             {
                 classes.push('number');
             }
+
+            if (typeof this._rawData === "boolean")
+            {
+                classes.push('bool');
+            }
         }
         
         return `<div class="${classes.join(' ')}">${display}</div>`;
