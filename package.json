@@ -24,6 +24,19 @@
                     "type": "number",
                     "default": 5255,
                     "description": "The port for the SharpPad HTTP server to listen on."
+                },
+                "sharppad.colorTheme": {
+                    "type": "string",
+                    "default": "dark",
+                    "enum": [
+                      "dark",
+                      "light"
+                    ],
+                    "enumDescriptions": [
+                      "The dark theme - matches the default Dark+",
+                      "The light theme - matches the default Light+"
+                    ],
+                    "description": "The color theme for the output window."
                 }
             }
         },

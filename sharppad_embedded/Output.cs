@@ -88,7 +88,7 @@ namespace SharpPad
 
             try
             {
-                await HttpHelper.Client.PostAsync("http://localhost:" + Port, content);
+                await HttpHelper.Client.PostAsync($"http://localhost:{Port}", content);
             }
             catch (HttpRequestException)
             {

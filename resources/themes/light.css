@@ -1,7 +1,7 @@
 body
 {
-    background: rgb(30, 30, 30);
-    color: #d4d4d4;
+    background: #ffffff;
+    color: #000000;
 }
 
 :root
@@ -10,18 +10,18 @@ body
     --monoFont: Consolas, "Courier New", monospace;
 
     --propName: currentColor;
-    --typeName: #4ec9b0;
-    --string: #ce9178;
-    --number: #b5cea8;
+    --typeName: #267f99;
+    --string: #a31515;
+    --number: #09885a;
     --null: rgb(150, 150, 150);
 
     --collectionBorder: rgb(69, 69, 69);
-    --dumpBorder: rgb(51, 51, 51);
+    --dumpBorder: rgb(44, 44, 44);
+    
+    --headerBg: rgb(44, 44, 44);
+    --headerFg: #ffffff;
 
-    --headerBg: rgb(51, 51, 51);
-    --headerFg: currentColor;
-
-    --dumpInnerBg: rgb(45, 45, 48);
+    --dumpInnerBg: rgb(243, 243, 243);
 
     --buttonBg: #0e639c;
     --buttonHoverBg: #1177bb;

@@ -2,6 +2,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import {Theme} from './Config';
 
 import IFormatProvider from './formatters/IFormatProvider'
 import RawFormatProvider from './formatters/RawFormatProvider';
@@ -19,11 +20,17 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
 
     constructor()
     {
-        var self = this;
-
-        this._stylesheets.push(ResourceLocator.getResource("theme.css"));
-        this._stylesheets.push(ResourceLocator.getResource("themes", "dark.css"));
         this._scripts.push(ResourceLocator.getResource("collapser.js"));
+    }
+
+    public setTheme(uri: vscode.Uri, theme: Theme)
+    {
+        this._stylesheets = [];
+
+        this._stylesheets.push(ResourceLocator.getResource("themes", `${theme}.css`));
+        this._stylesheets.push(ResourceLocator.getResource("theme.css"));
+
+        this.update(uri);
     }
 
     get onDidChange(): vscode.Event<vscode.Uri>

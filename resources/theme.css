@@ -35,6 +35,7 @@ header
     
     width: calc(100% - 13px);
     background-color: var(--headerBg);    
+    color: var(--headerFg);
 }
 
 header, header * 
@@ -48,15 +49,15 @@ header button
     cursor: pointer;
 
     padding: 1px 6px 1px 6px;
-    background-color: #0e639c;
-    color: #ffffff;
+    background-color: var(--buttonBg);
+    color: var(--buttonFg);
     border: none;
     font-weight: 600;
 }
 
 header button:hover
 {
-    background-color: #1177bb;
+    background-color: var(--buttonHoverBg);
 }
 
 header button:focus
@@ -146,7 +147,7 @@ td.equals
 
 table .object > table
 {
-    background: rgb(45, 45, 48);
+    background: var(--dumpInnerBg);
     border: 1px solid var(--collectionBorder);
 
     margin: 0 0 0.25em 0;

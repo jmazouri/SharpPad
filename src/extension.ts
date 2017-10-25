@@ -29,6 +29,8 @@ function startServer()
 {
     loadConfig();
 
+    provider.setTheme(previewUri, config.theme);
+
     server = new SharpPadServer(config.listenServerPort, dump => 
     {   
         provider.addAndUpdate(previewUri, DataFormatter.getFormatter(dump));
@@ -70,7 +72,7 @@ export function activate(context: vscode.ExtensionContext)
     {
         restartServer();
     });
-
+    
     //Register the command to manually show the SharpPad window, for arbitrary dumping
     var disposable = vscode.commands.registerCommand('sharppad.showSharpPad', () =>
     {
