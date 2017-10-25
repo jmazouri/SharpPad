@@ -48,7 +48,8 @@ namespace SharpPad
 
             JObject tupleObject = new JObject
             {
-                ["$type"] = tupleResult.GetType().FullName
+                //Serialize the object then re-parse it to capture Json.Net's cleaned up type names
+                ["$type"] = JObject.Parse(JsonConvert.SerializeObject(tupleResult, Settings))["$type"]
             };
 
             for (int i = 0; i < tupleNames.Count; i++)
