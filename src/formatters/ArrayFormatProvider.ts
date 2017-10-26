@@ -1,20 +1,21 @@
-let he = require('he');
-
 import IFormatProvider from './IFormatProvider'
 import DataFormatter from './DataFormatter'
 
 import TypeNameParser from '../parsers/TypeNameParser'
 import TypeName from '../parsers/TypeName'
+import {TypeNameStyle} from '../parsers/TypeName'
 
 export default class ArrayFormatProvider implements IFormatProvider
 {
     private _targetArr: Array<any>;
     private _type: TypeName;
+    private _style: TypeNameStyle;
 
-    constructor(targetArr: any)
+    constructor(targetArr: any, style: TypeNameStyle)
     {
         this._targetArr = targetArr.$values;
         this._type = TypeNameParser.parse(targetArr.$type);
+        this._style = style;
     }
 
     formatToHtml(): string
@@ -28,6 +29,6 @@ export default class ArrayFormatProvider implements IFormatProvider
 
         build += "</table>";
 
-        return `<div class="array" title="${this._type.toString()}">${build}</div>`;
+        return `<div class="array" title="${this._type.toString(this._style)}">${build}</div>`;
     }
 }

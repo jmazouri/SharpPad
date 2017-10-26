@@ -1,11 +1,8 @@
-body
-{
-    background: rgb(30, 30, 30);
-    color: #d4d4d4;
-}
-
 :root
 {
+    --bodyFg: #d4d4d4;
+    --bodyBg: rgb(30, 30, 30);
+
     --sansSerifFont: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "HelveticaNeue-Light", "Ubuntu", "Droid Sans", sans-serif;
     --monoFont: Consolas, "Courier New", monospace;
 

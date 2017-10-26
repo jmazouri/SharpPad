@@ -7,12 +7,10 @@
 
 import TypeName from './TypeName'
 
-export type TypeNameStyle = "namespaced" | "normal" | "shorthand";
-
 export default class TypeNameParser
 {
     //static typeNameParser: P.Parser
-    static parse(input: string, style: TypeNameStyle = "normal"): TypeName
+    static parse(input: string): TypeName
     {
         let ret = new TypeName();
 
@@ -66,15 +64,13 @@ export default class TypeNameParser
             }
         }
 
-        let namePartial = input;
-
         if (ret.typeParameters.length > 0)
         {
-            ret.name = namePartial.substr(0, namePartial.indexOf('`'));
+            ret.name = input.substr(0, input.indexOf('`'));
         }
         else
         {
-            ret.name = namePartial.substr(0, index);
+            ret.name = input.substr(0, index);
         }
 
         if (ret.name.indexOf("__AnonymousType") > -1)

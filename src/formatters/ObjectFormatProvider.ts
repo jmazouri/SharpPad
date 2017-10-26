@@ -1,9 +1,9 @@
-let he = require('he');
-
 import IFormatProvider from './IFormatProvider'
 import DataFormatter from './DataFormatter'
 import TypeNameParser from '../parsers/TypeNameParser'
+
 import TypeName from '../parsers/TypeName'
+import {TypeNameStyle} from '../parsers/TypeName'
 
 export default class ObjectFormatProvider implements IFormatProvider
 {
@@ -11,17 +11,19 @@ export default class ObjectFormatProvider implements IFormatProvider
 
     private _targetObj: any;
     private _type: TypeName;
+    private _style: TypeNameStyle;
 
-    constructor(targetObj: any)
+    constructor(targetObj: any, style: TypeNameStyle)
     {
         this._targetObj = targetObj;
         this._type = TypeNameParser.parse(targetObj.$type);
+        this._style = style;
     }
 
     formatToHtml(): string
     {
         let build = `<h4 class='typeName clickable'>
-            ${he.encode(this._type.toString())} <span class='collapse'></span>
+            ${this._type.toString(this._style)} <span class='collapse'></span>
         </h4><table><tbody class='propList'>`;
 
         for (var property in this._targetObj)

@@ -2,6 +2,9 @@ body,html
 {
     margin: 0;
     padding: 0;
+
+    background: var(--bodyBg);
+    color: var(--bodyFg);
 }
 
 *
@@ -124,10 +127,12 @@ td.equals
 .object .collapse
 {
     text-align: right;
+    color: var(--bodyFg);
 }
 
-.object.hidden > table
+.hidden > table
 {
+    /*
     display: inline-block;
 
     border: none;
@@ -137,6 +142,9 @@ td.equals
     margin: 0;
     
     height: 0;
+    */
+
+    display: none;
 }
 
 
@@ -197,7 +205,12 @@ table .object > table
     color: var(--null);
 }
 
-.raw.bool
+.raw.bool, .keyword
 {
     color: var(--bool);
+}
+
+.normal
+{
+    color: var(--bodyFg);
 }

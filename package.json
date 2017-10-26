@@ -4,6 +4,11 @@
     "description": "Test snippets of C# code directly from your editor!",
     "version": "0.0.1",
     "publisher": "jmazouri",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jmazouri/SharpPad.git"
+    },
+    "license": "MIT",
     "engines": {
         "vscode": "^1.17.0"
     },
@@ -29,14 +34,31 @@
                     "type": "string",
                     "default": "dark",
                     "enum": [
-                      "dark",
-                      "light"
+                        "dark",
+                        "light"
                     ],
                     "enumDescriptions": [
-                      "The dark theme - matches the default Dark+",
-                      "The light theme - matches the default Light+"
+                        "The dark theme - matches the default Dark+",
+                        "The light theme - matches the default Light+"
                     ],
                     "description": "The color theme for the output window."
+                },
+                "sharppad.typeNameStyle": {
+                    "type": "string",
+                    "default": "shorthand",
+                    "enum": [
+                        "shorthand",
+                        "normal",
+                        "namespaced",
+                        "mixedShorthandNamespaced"
+                    ],
+                    "enumDescriptions": [
+                        "The shorthand form - Boolean becomes bool, Int32 becomes int, etc - where applicable",
+                        "The normal form - Boolean, Int32, etc. Default.",
+                        "The namespaced form - System.Boolean, System.Int32, etc",
+                        "Mixed shorthand and namespaced form - System.Boolean becomes bool, but System.Collections.Generic.List remains"
+                    ],
+                    "description": "The style that types should be displayed in."
                 }
             }
         },
@@ -60,7 +82,5 @@
         "@types/node": "^7.0.43",
         "@types/mocha": "^2.2.42"
     },
-    "dependencies": {
-        "he": "^1.1.1"
-    }
+    "dependencies": {}
 }

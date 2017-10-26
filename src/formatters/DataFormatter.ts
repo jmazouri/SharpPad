@@ -6,9 +6,12 @@ import GridFormatProvider from './GridFormatProvider'
 import DumpContainerFormatProvider from './DumpContainerFormatProvider'
 
 import TypeNameParser from '../parsers/TypeNameParser'
+import {TypeNameStyle} from '../parsers/TypeName'
 
 export default class DataFormatter
 {
+    static style: TypeNameStyle = "normal";
+    
     /*
         This method decides what formatter implementation to use for a given input.
         The input can be "anything", and the conventions used are based on those used
@@ -27,7 +30,7 @@ export default class DataFormatter
             {
                 let type = TypeNameParser.parse(target.$type);
     
-                if (type.simplestName == "DumpContainer")
+                if (type.displayName == "DumpContainer")
                 {
                     return new DumpContainerFormatProvider(target);
                 }
@@ -41,19 +44,19 @@ export default class DataFormatter
                     (contain a '$type' property), use a grid formatter - otherwise use the simpler,
                     single-line array formatter.
                 */
-                if (target.$values.length > 0 && target.$values[0].$type)
+                if (target.$values.length > 0 && (target.$values[0].$type || typeof target.$values[0] === "object"))
                 {
-                    return new GridFormatProvider(target);
+                    return new GridFormatProvider(target, DataFormatter.style);
                 }
                 else
                 {
-                    return new ArrayFormatProvider(target);
+                    return new ArrayFormatProvider(target, DataFormatter.style);
                 }
             }
             else if (target.$type)
             {
                 //If it's not an array, but still has a type, it's some other object.
-                return new ObjectFormatProvider(target);
+                return new ObjectFormatProvider(target, DataFormatter.style);
             }
         }
 

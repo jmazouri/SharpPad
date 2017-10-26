@@ -1,5 +1,3 @@
-let he = require('he');
-
 import IFormatProvider from './IFormatProvider'
 
 export default class RawFormatProvider implements IFormatProvider

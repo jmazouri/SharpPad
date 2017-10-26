@@ -1,8 +1,12 @@
+import TypeNameShorthands from './TypeNameShorthands';
+export type TypeNameStyle = "namespaced" | "normal" | "shorthand" | "mixedShorthandNamespaced";
+
 export default class TypeName
 {
     typeParameters: TypeName[] = [];
     name: string;
-    get simplestName(): string
+    
+    get displayName(): string
     {
         let split = this.name.split('.');
         
@@ -16,13 +20,49 @@ export default class TypeName
         }
     }
 
-    public toString() : string
+    public toString(style: TypeNameStyle) : string
     {
-        let template = `${this.simplestName}`;
+        let template = "";
+
+        switch (style)
+        {
+            case "namespaced":
+                template += this.name;
+                break;
+
+            case "mixedShorthandNamespaced":
+            case "shorthand":
+                let foundName = TypeNameShorthands[this.name];
+
+                if (foundName == undefined)
+                {
+                    if (style == "mixedShorthandNamespaced")
+                    {
+                        template += this.name;
+                    }
+                    else
+                    {
+                        template += this.displayName;
+                    }
+                }
+                else
+                {
+                    template += `<span class="keyword">${foundName}</span>`;
+                }
+
+                break;
+
+            default:
+                template += this.displayName;
+        }
 
         if (this.typeParameters && this.typeParameters.length > 0)
         {
-            template += `<${this.typeParameters.map(d => d.toString()).join(", ")}>`;
+            let params = this.typeParameters
+                .map(d => d.toString(style))
+                .join("<span class='normal'>, </span>");
+            
+            template += `<span class='normal'>&lt;</span>${params}<span class='normal'>&gt;</span>`;
         }
 
         return template;
