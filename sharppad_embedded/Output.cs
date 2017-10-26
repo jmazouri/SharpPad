@@ -72,29 +72,32 @@ namespace SharpPad
         /// </summary>
         public static async Task Dump<T>(this T input, string title = null)
         {
-            if (title == null)
-            {
-                var trace = new StackTrace(true);
-                var targetFrame = trace.GetFrames().SkipWhile(d => d.GetMethod().Name != "Dump").Skip(1).First();
-
-                var codeLine = File.ReadAllLines(targetFrame.GetFileName()).Skip(targetFrame.GetFileLineNumber() - 1).First();
-                var dumpMethodIndex = codeLine.IndexOf(".Dump");
-
-                if (dumpMethodIndex > -1)
-                {
-                    title = codeLine.Substring(0, dumpMethodIndex).Replace("await ", "").Trim();
-                }
-            }
-
             string serialized;
 
             serialized = JsonConvert.SerializeObject(new DumpContainer()
             {
                 Title = title,
-                Value = input
+                Value = input,
+                Source = GetStackTrace()
             }, Settings);
 
             await SendContent(serialized);
+        }
+        
+        private static string GetStackTrace()
+        {
+            var trace = new StackTrace(true);
+            var targetFrame = trace.GetFrames().SkipWhile(d => d.GetMethod().Name != "Dump").Skip(1).First();
+
+            var codeLine = File.ReadAllLines(targetFrame.GetFileName()).Skip(targetFrame.GetFileLineNumber() - 1).First();
+            var dumpMethodIndex = codeLine.IndexOf(".Dump");
+
+            if (dumpMethodIndex > -1)
+            {
+                return codeLine.Substring(0, dumpMethodIndex).Replace("await ", "").Trim();
+            }
+
+            return null;
         }
 
         private static async Task SendContent(string serialized)

@@ -10,6 +10,9 @@ namespace SharpPad
         [JsonProperty("title")]
         public string Title { get; set; }
 
+        [JsonProperty("source")]
+        public string Source { get; set; }
+
         [JsonProperty("$value")]
         public object Value { get; set; }
     }
