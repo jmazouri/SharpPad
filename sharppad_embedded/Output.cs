@@ -2,6 +2,8 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -70,6 +72,20 @@ namespace SharpPad
         /// </summary>
         public static async Task Dump<T>(this T input, string title = null)
         {
+            if (title == null)
+            {
+                var trace = new StackTrace(true);
+                var targetFrame = trace.GetFrames().SkipWhile(d => d.GetMethod().Name != "Dump").Skip(1).First();
+
+                var codeLine = File.ReadAllLines(targetFrame.GetFileName()).Skip(targetFrame.GetFileLineNumber() - 1).First();
+                var dumpMethodIndex = codeLine.IndexOf(".Dump");
+
+                if (dumpMethodIndex > -1)
+                {
+                    title = codeLine.Substring(0, dumpMethodIndex).Replace("await ", "").Trim();
+                }
+            }
+
             string serialized;
 
             serialized = JsonConvert.SerializeObject(new DumpContainer()
