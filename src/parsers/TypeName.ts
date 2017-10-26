@@ -5,7 +5,7 @@ export default class TypeName
 {
     typeParameters: TypeName[] = [];
     name: string;
-    
+
     get displayName(): string
     {
         let split = this.name.split('.');

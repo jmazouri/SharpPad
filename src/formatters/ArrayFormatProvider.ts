@@ -29,6 +29,6 @@ export default class ArrayFormatProvider implements IFormatProvider
 
         build += "</table>";
 
-        return `<div class="array" title="${this._type.toString(this._style)}">${build}</div>`;
+        return `<div class="array">${build}</div>`;
     }
 }
