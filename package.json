@@ -59,6 +59,19 @@
                         "Mixed shorthand and namespaced form - System.Boolean becomes bool, but System.Collections.Generic.List remains"
                     ],
                     "description": "The style that types should be displayed in."
+                },
+                "sharppad.dumpSourceStyle": {
+                    "type": "string",
+                    "default": "show",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Show the source line, if a title isn't specified",
+                        "Don't ever show the source line"
+                    ],
+                    "description": "Whether the source line for a dump should be displayed (if there is no title)."
                 }
             }
         },

@@ -74,7 +74,7 @@ namespace SharpPad
         {
             string serialized;
 
-            serialized = JsonConvert.SerializeObject(new DumpContainer()
+            serialized = JsonConvert.SerializeObject(new DumpContainer
             {
                 Title = title,
                 Value = input,

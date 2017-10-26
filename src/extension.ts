@@ -29,7 +29,9 @@ function startServer()
 {
     loadConfig();
 
-    DataFormatter.style = config.typeNameStyle;
+    DataFormatter.typeNameStyle = config.typeNameStyle;
+    DataFormatter.dumpSourceStyle = config.dumpSourceStyle;
+    
     provider.setTheme(previewUri, config.theme);
     
     server = new SharpPadServer(config.listenServerPort, dump => 
