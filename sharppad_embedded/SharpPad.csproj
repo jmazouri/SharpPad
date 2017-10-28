@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>John Mazouri</Authors>
+    <Company />
+    <Product />
+    <Description>Test snippets of C# code directly from your editor!</Description>
+    <Copyright>2017 John Mazouri</Copyright>
+    <PackageLicenseUrl>https://github.com/jmazouri/SharpPad/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/jmazouri/SharpPad</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jmazouri/SharpPad.git</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags />
   </PropertyGroup>
 
   <ItemGroup>
