@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>John Mazouri</Authors>
+	<Version>1.0.3</Version>
     <Company />
     <Product />
     <Description>Test snippets of C# code directly from your editor!</Description>

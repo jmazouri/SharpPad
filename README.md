@@ -2,23 +2,7 @@
 
 SharpPad is an extension for Visual Studio Code that allows you easily inspect the results of your code. It works similarly to standalone tools like LinqPad and RoslynPad. 
 
-```csharp
-class Foo
-{
-    public string Name {get; set;}
-    public decimal Money {get; set;}
-    public DateTime Date {get; set;}
-}
-
-var foo = new Foo
-{
-    Name = "John",
-    Money = 12345.66m,
-    Date = DateTime.Now
-};
-
-await foo.Dump();
-```
+![Example](https://i.imgur.com/geOXysP.png)
 
 ## How to Use
 
