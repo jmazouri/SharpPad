@@ -2,3 +2,8 @@ out
 node_modules
 .vscode-test/
 .vsix
+SharpPad.Template/content/.vscode
+**/bin
+**/obj
+*.nupkg
+*.vsix

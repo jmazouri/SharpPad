@@ -1,0 +1,10 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "John Mazouri",
+    "classifications": [ "Console", "Development" ],
+    "identity": "SharpPad.Template",
+    "name": "SharpPad Template",
+    "shortName": "sharppad",
+	"sourceName": "Template",
+	"preferNameDirectory": true
+}

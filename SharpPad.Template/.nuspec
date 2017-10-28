@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+	<metadata>
+		<id>SharpPad.Template</id>
+		<version>1.0.2</version>
+		<description>
+			Template for SharpPad projects. Install &amp; use this template via the dotnet cli
+		</description>
+		<summary>
+			Template for SharpPad projects
+		</summary>
+		<projectUrl>https://github.com/jmazouri/SharpPad</projectUrl>
+		<authors>John Mazouri</authors>
+		<packageTypes>
+			<packageType name="Template" />
+		</packageTypes>
+	</metadata>
+</package>

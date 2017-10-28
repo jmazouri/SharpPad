@@ -2,19 +2,31 @@
     "name": "sharppad",
     "displayName": "SharpPad",
     "description": "Test snippets of C# code directly from your editor!",
-    "version": "0.0.1",
+    "version": "1.0.3",
     "publisher": "jmazouri",
     "repository": {
         "type": "git",
         "url": "https://github.com/jmazouri/SharpPad.git"
+    },
+    "bugs": {
+        "url": "https://github.com/jmazouri/SharpPad/issues",
+        "email": "me@jmazouri.com"
     },
     "license": "MIT",
     "engines": {
         "vscode": "^1.17.0"
     },
     "categories": [
-        "Other"
+        "Other" 
     ],
+    "keywords": [
+        "c#", "test", "debug", "dump", "sharp"
+    ],
+    "icon": "icon.png",
+    "galleryBanner": {
+        "color": "#68217a",
+        "theme": "dark"
+    },
     "activationEvents": [
         "onLanguage:csharp",
         "onCommand:sharppad.showSharpPad"
@@ -83,7 +95,7 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
+        "vscode:prepublish": "cp ../README.md ./README.md && npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
