@@ -87,7 +87,12 @@ namespace SharpPad
         private static string GetStackTrace()
         {
             var trace = new StackTrace(true);
-            var targetFrame = trace.GetFrames().SkipWhile(d => d.GetMethod().Name != "Dump").Skip(1).First();
+            var targetFrame = trace.GetFrames().SkipWhile(d => d.GetMethod().Name != "Dump").Skip(1).FirstOrDefault();
+
+            if (targetFrame == null || targetFrame.GetFileName() == null)
+            {
+                return null;
+            }
 
             var codeLine = File.ReadAllLines(targetFrame.GetFileName()).Skip(targetFrame.GetFileLineNumber() - 1).First();
             var dumpMethodIndex = codeLine.IndexOf(".Dump");
