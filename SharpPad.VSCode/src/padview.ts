@@ -1,11 +1,11 @@
 'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
-import {Theme} from './Config';
+import * as vscode from 'vscode'
+import {Theme} from './Config'
 
 import IFormatProvider from './formatters/IFormatProvider'
-import RawFormatProvider from './formatters/RawFormatProvider';
+import RawFormatProvider from './formatters/RawFormatProvider'
 import ResourceLocator from './theming/ResourceLocator'
 
 export default class PadViewContentProvider implements vscode.TextDocumentContentProvider
@@ -17,6 +17,9 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
     private _scripts: string[] = [];
 
     private _defaultMessage = "";
+
+    public port: Number;
+    public scrollToBottom: Boolean;
 
     constructor()
     {
@@ -77,8 +80,9 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
 
         builder += `<header>
             <div class="left">
-                <button id='collapseAll'>Collapse All</button>
-                <button id='expandAll'>Expand All</button>
+                <button id='clear' class='clear' title='Clear All Dumps'>X</button>
+                <button id='collapseAll' title='Collapse All'>⮝</button>
+                <button id='expandAll' title='Expand All'>⮟</button>
             </div>
             <div class="right">
                 <div>${this._formatters.length} entries</div>
@@ -101,6 +105,8 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
         
         for (let js of this._scripts)
         {
+            builder += `<script>window.listenPort = ${this.port};</script>`;
+            builder += `<script>window.scrollToBottom = ${this.scrollToBottom};</script>`;
             builder += `<script src='${js}'></script>`;
         }
 

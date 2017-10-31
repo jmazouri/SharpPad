@@ -28,6 +28,12 @@ expandAll.addEventListener("click", function()
     }
 });
 
+let clear = document.getElementById("clear");
+clear.addEventListener("click", function()
+{
+    fetch('http://localhost:' + window.listenPort + '/clear', { method: 'get' });  
+});
+
 function changeVisibility(collapse, visible)
 {
     let target = collapse.parentElement.parentElement;
@@ -52,4 +58,9 @@ function changeVisibility(collapse, visible)
 function setIcon(collapse, isHidden)
 {
     collapse.innerHTML = isHidden ? '&#9650;' : '&#9660;';
+}
+
+if (window.scrollToBottom)
+{
+    document.body.scrollTop = document.body.scrollHeight;
 }

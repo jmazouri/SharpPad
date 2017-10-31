@@ -12,10 +12,14 @@ export default class Config
         this.theme = config.get<Theme>("colorTheme");
         this.typeNameStyle = config.get<TypeNameStyle>("typeNameStyle");
         this.dumpSourceStyle = config.get<DumpSourceStyle>("dumpSourceStyle");
+        this.autoScrollToBottom = config.get<Boolean>("autoScrollToBottom");
+        this.showTimeOnDumps = config.get<Boolean>("showTimeOnDumps");
     }
     
     theme: Theme;
     listenServerPort: number;
     typeNameStyle: TypeNameStyle;
     dumpSourceStyle: DumpSourceStyle;
+    autoScrollToBottom: Boolean;
+    showTimeOnDumps: Boolean;
 }

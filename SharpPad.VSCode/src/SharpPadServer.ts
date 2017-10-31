@@ -1,16 +1,16 @@
 import * as vscode from 'vscode';
 import * as http from 'http';
+import DumpContainer from './DumpContainer'
+import HttpRouter, { HttpMethod } from './HttpRouter'
 
 export default class SharpPadServer
 {
     private _server: http.Server;
-    private _onDump: (dump: any) => any;
-
+    private _router = new HttpRouter();
     private _statusBarMessage: vscode.StatusBarItem;
 
-    constructor(port: number, onDump: (dump: any) => any)
+    constructor(port: number, onDump: (dump: DumpContainer) => void, onClear: Function)
     {
-        this._onDump = onDump;
         this._server = http.createServer((req, res) => this.handleRequest(req, res));
 
         let self = this;
@@ -23,6 +23,14 @@ export default class SharpPadServer
 
             self._statusBarMessage.show();
         });
+
+        this._router.registerRoute("/", "POST", (body) => 
+        {
+            let result: DumpContainer = JSON.parse(body);
+            onDump(result);
+        });
+        
+        this._router.registerRoute("/clear", "GET", (body) => onClear());
     }
 
     public close(whenDone: Function = () => null)
@@ -45,7 +53,8 @@ export default class SharpPadServer
         .on('end', () =>
         {
             let content = Buffer.concat(body).toString();
-            self._onDump(JSON.parse(content));
+
+            self._router.executeRoute(req.url, <HttpMethod>req.method, content);
 
             res.statusCode = 200;
             res.end();

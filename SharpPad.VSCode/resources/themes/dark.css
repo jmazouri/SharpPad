@@ -21,6 +21,10 @@
 
     --dumpInnerBg: rgb(45, 45, 48);
 
+    --clearBg: #A92120;
+    --clearHoverBg: #F5302E;
+    --clearFg: #ffffff;
+
     --buttonBg: #0e639c;
     --buttonHoverBg: #1177bb;
     --buttonFg: #ffffff;

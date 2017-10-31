@@ -14,6 +14,7 @@ export default class DataFormatter
 {
     static typeNameStyle: TypeNameStyle = "normal";
     static dumpSourceStyle: DumpSourceStyle = "show"; 
+    static showTimeOnDumps: Boolean = true;
     
     /*
         This method decides what formatter implementation to use for a given input.
@@ -35,7 +36,7 @@ export default class DataFormatter
     
                 if (type.displayName == "DumpContainer")
                 {
-                    return new DumpContainerFormatProvider(target, DataFormatter.dumpSourceStyle);
+                    return new DumpContainerFormatProvider(target, DataFormatter.dumpSourceStyle, DataFormatter.showTimeOnDumps);
                 }
             }
 

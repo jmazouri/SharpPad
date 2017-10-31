@@ -2,7 +2,7 @@
     "name": "sharppad",
     "displayName": "SharpPad",
     "description": "Test snippets of C# code directly from your editor!",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "publisher": "jmazouri",
     "repository": {
         "type": "git",
@@ -41,6 +41,16 @@
                     "type": "number",
                     "default": 5255,
                     "description": "The port for the SharpPad HTTP server to listen on."
+                },
+                "sharppad.autoScrollToBottom": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Automatically scroll to the bottom of the output window when a dump appears."
+                },
+                "sharppad.showTimeOnDumps": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show the time a dump occurred in the bottom right."
                 },
                 "sharppad.colorTheme": {
                     "type": "string",

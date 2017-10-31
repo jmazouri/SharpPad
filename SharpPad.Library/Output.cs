@@ -18,6 +18,8 @@ namespace SharpPad
         private static readonly JsonSerializerSettings Settings;
         public static int Port { get; set; } = 5255;
 
+        private static string Endpoint => $"http://localhost:{Port}";
+
         static Output()
         {
             Settings = new JsonSerializerSettings
@@ -34,6 +36,28 @@ namespace SharpPad
 
             //We want nice enum names in our json
             Settings.Converters.Add(new StringEnumConverter());
+        }
+
+        public static void RedirectConsoleOutput(bool redirect)
+        {
+            RedirectConsoleOutput(redirect, "Console Output");
+        }
+
+        public static void RedirectConsoleOutput(bool redirect, string title)
+        {
+            if (redirect)
+            {
+                Console.SetOut(new SharpPadTextWriter(title));
+            }
+            else
+            {
+                var standardOutput = new StreamWriter(Console.OpenStandardOutput())
+                {
+                    AutoFlush = true
+                };
+
+                Console.SetOut(standardOutput);
+            }
         }
 
         /// <summary>
@@ -64,7 +88,7 @@ namespace SharpPad
                 }
             }
 
-            await Dump(tupleObject);
+            await DumpInternal(tupleObject, null, false);
         }
 
         /// <summary>
@@ -72,34 +96,72 @@ namespace SharpPad
         /// </summary>
         public static async Task Dump<T>(this T input, string title = null)
         {
+            await DumpInternal(input, title, true);
+        }
+
+        /// <summary>
+        /// Clears the output window.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task Clear()
+        {
+            await MakeHttpRequest(client => client.GetAsync($"{Endpoint}/clear"));
+        }
+
+        internal static async Task DumpInternal(object input, string title, bool withStackTrace)
+        {
             string serialized;
 
             serialized = JsonConvert.SerializeObject(new DumpContainer
             {
                 Title = title,
                 Value = input,
-                Source = GetStackTrace()
+                Source = (withStackTrace ? await GetStackTrace() : null)
             }, Settings);
 
             await SendContent(serialized);
         }
         
-        private static string GetStackTrace()
+        private static async Task<string> GetStackTrace()
         {
             var trace = new StackTrace(true);
-            var targetFrame = trace.GetFrames().SkipWhile(d => d.GetMethod().Name != "Dump").Skip(1).FirstOrDefault();
+            var filteredFrames = trace.GetFrames().SkipWhile(d => d.GetMethod().Name != "Dump");
+            var targetFrame = filteredFrames.Skip(1).FirstOrDefault();
 
             if (targetFrame == null || targetFrame.GetFileName() == null)
             {
                 return null;
             }
 
-            var codeLine = File.ReadAllLines(targetFrame.GetFileName()).Skip(targetFrame.GetFileLineNumber() - 1).First();
-            var dumpMethodIndex = codeLine.IndexOf(".Dump");
-
-            if (dumpMethodIndex > -1)
+            try
             {
-                return codeLine.Substring(0, dumpMethodIndex).Replace("await ", "").Trim();
+                using (var fileStream = File.OpenText(targetFrame.GetFileName()))
+                {
+                    string codeLine = null;
+                    int lineNum = targetFrame.GetFileLineNumber();
+
+                    for (int i = 0; i < lineNum; i++)
+                    {
+                        codeLine = await fileStream.ReadLineAsync();
+                    }
+
+                    int dumpMethodIndex = codeLine.IndexOf(".Dump");
+
+                    if (dumpMethodIndex > -1)
+                    {
+                        return codeLine.Substring(0, dumpMethodIndex).Replace("await ", "").Trim();
+                    }
+                }                
+            }
+            catch (Exception ex) when
+            (
+                ex is IOException ||
+                ex is NotSupportedException || 
+                ex is UnauthorizedAccessException
+            )
+            {
+                Console.WriteLine($"Couldn't open stack trace for file \"{targetFrame.GetFileName()}\"");
+                return null;
             }
 
             return null;
@@ -110,9 +172,14 @@ namespace SharpPad
             var content = new StringContent(serialized);
             content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
+            await MakeHttpRequest(client => client.PostAsync(Endpoint, content));
+        }
+
+        private static async Task MakeHttpRequest(Func<HttpClient, Task> request)
+        {
             try
             {
-                await HttpHelper.Client.PostAsync($"http://localhost:{Port}", content);
+                await request.Invoke(HttpHelper.Client);
             }
             catch (HttpRequestException)
             {
@@ -120,7 +187,7 @@ namespace SharpPad
                 Console.WriteLine(msg);
 
                 throw;
-            }
+            }   
         }
 
         /// <summary>
@@ -128,9 +195,9 @@ namespace SharpPad
         /// </summary>
         /// <remarks>Calls GetAwaiter().GetResult() on the async method. Not recommended.</remarks>
         [Obsolete("Only use this method if you absolutely have to - use DumpAsync otherwise.")]
-        public static void DumpBlocking<T>(this T input)
+        public static void DumpBlocking<T>(this T input, string title = null)
         {
-            Dump(input).GetAwaiter().GetResult();
+            DumpInternal(input, title, true).GetAwaiter().GetResult();
         }
     }
 }

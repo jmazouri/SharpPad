@@ -31,23 +31,31 @@ function startServer()
 
     DataFormatter.typeNameStyle = config.typeNameStyle;
     DataFormatter.dumpSourceStyle = config.dumpSourceStyle;
+    DataFormatter.showTimeOnDumps = config.showTimeOnDumps;
     
     provider.setTheme(previewUri, config.theme);
+    provider.port = config.listenServerPort;
+    provider.scrollToBottom = config.autoScrollToBottom;
     
-    server = new SharpPadServer(config.listenServerPort, dump => 
-    {   
-        provider.addAndUpdate(previewUri, DataFormatter.getFormatter(dump));
-        
-        /*
-            If the debugger is running, try to show a new SharpPad window when
-            we get a new dump request. We don't do this every time because VSCode
-            will blindly create duplicate windows.
-        */
-        if (vscode.debug.activeDebugSession !== undefined)
-        {
-            showWindow();
-        }
-    });
+    server = new SharpPadServer
+    (
+        config.listenServerPort, 
+        dump => 
+        {   
+            provider.addAndUpdate(previewUri, DataFormatter.getFormatter(dump));
+            
+            /*
+                If the debugger is running, try to show a new SharpPad window when
+                we get a new dump request. We don't do this every time because VSCode
+                will blindly create duplicate windows.
+            */
+            if (vscode.debug.activeDebugSession !== undefined)
+            {
+                showWindow();
+            }
+        },
+        clear => provider.clear(previewUri)
+    );
 }
 
 function restartServer()

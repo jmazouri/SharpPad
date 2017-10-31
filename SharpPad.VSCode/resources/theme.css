@@ -56,16 +56,30 @@ header button
 {
     cursor: pointer;
 
-    padding: 1px 6px 1px 6px;
     background-color: var(--buttonBg);
     color: var(--buttonFg);
     border: none;
-    font-weight: 600;
+
+    width: 26px;
+    height: 18px;
+
+    margin-right: 2px;
+}
+
+header button.clear
+{
+    background-color: var(--clearBg);
+    color: var(--clearFg);
 }
 
 header button:hover
 {
     background-color: var(--buttonHoverBg);
+}
+
+header button.clear:hover
+{
+    background-color: var(--clearHoverBg);
 }
 
 header button:focus
@@ -80,7 +94,7 @@ header .right
 
 .dumpContainer
 {
-    margin-top: 2em;
+    margin-top: 2.2em;
 }
 
 .clickable
@@ -96,7 +110,7 @@ header .right
 
 .dumpTitle
 {
-    padding: 0.5em 0.5em 0 0.4em;
+    padding: 0.5em 0.5em 0em 0.5em;
     font-size: 1.25em;
     font-family: var(--sansSerifFont);
 }
@@ -105,7 +119,9 @@ header .right
 {
     font-size: 0.85em;
     text-align: right;
-    margin-top: -1.2em;
+
+    margin-top: -0.3em;
+    margin-bottom: -0.5em;
 }
 
 th,td

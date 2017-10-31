@@ -12,7 +12,14 @@ export default class TypeName
         
         if (split && split.length > 0)
         {
-            return split[split.length - 1];
+            var namePart = split[split.length - 1];
+
+            if (namePart.indexOf('+') > -1)
+            {
+                return namePart.substr(0, namePart.indexOf('+'));
+            }
+
+            return namePart;
         }
         else
         {
