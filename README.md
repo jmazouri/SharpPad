@@ -39,11 +39,7 @@ Dump nearly anything!
 
 SharpPad runs a listening HTTP server in your editor. When you call `Dump()` from your code, a request is made to this webserver containing the serialized form of your data. The extension formats this request, and presents it.
 
-This means SharpPad requires an open port on your machine (though only on localhost) - it defaults to `5255`, and can be adjusted in VSCode via the `sharppad.listenServerPort` configuration option, and in your code via the static `SharpPad.Output.Port` property.
-
-You can also have your console output redirect to SharpPad - just call `SharpPad.Output.RedirectConsoleOutput(true)`, and optionally add a second argument for title to separate console output from your other dumps.
-
-If you'd like to clean the output window programmatically, call `SharpPad.Output.Clear()`.
+This means SharpPad requires an open port on your machine - it defaults to `5255`, and can be adjusted in VSCode via the `sharppad.listenServerPort` configuration option, and in your code via the static `SharpPad.Output.Port` property.
 
 ## Troubleshooting/Notes
 
@@ -53,6 +49,19 @@ If you'd like to use SharpPad as an output window for your program without runni
 
 ## Release Notes
 
+### 1.0.5
+
+- Added custom theme support 
+    - Set your `sharppad.customThemePath` setting to the URI to a css file
+        - Needs `file:///` prefix for local files
+    - Overrides dark/light setting, but falls back to those values for anything missing (as CSS does)
+    - See resources/themes/dark.css and light.css for examples
+- Added new option for display format - `sharppad.dumpDisplayStyle`
+    - Full (existing functionality), and single-line
+    - Useful for console-like, condensed output
+- Added ability to disable type name display
+- Some small display and output fixes
+
 ### 1.0.0
 
 - Initial release
@@ -60,6 +69,6 @@ If you'd like to use SharpPad as an output window for your program without runni
 ## Hopeful Features
 
 - Better ValueTuple support (if possible)
-- More language-agnostic implementation (to support languages other than C#)
+- More language-agnostic implementation (to support non-CLR languages)
 - More Dump options/inputs
 - Allow dumping raw HTML (works now but not intentionally)
