@@ -34,31 +34,67 @@ export default class GridFormatProvider implements IFormatProvider
 
     formatToHtml(): string
     {
-        let build = `<h4 class='clickable'>
-            <span class='typeName'>${this._type.toString(this._style)}</span>
-            <span class='count'>(${this._objCollection.length} items)</span>
-            <span class='collapse'></span>
-        </h4><table><thead><tr>`;
+        let build = '';
+
+        if (this._style != "none")
+        {
+            build += `<h4 class='clickable'>
+                <span class='typeName'>${this._type.toString(this._style)}</span>
+                <span class='count'>(${this._objCollection.length} items)</span>
+                <span class='collapse'></span>
+            </h4>`;
+        }
+
+        build += '<table><thead><tr>';
+
+        if (this._objCollection.length > 1)
+        {
+            build += `<th></th>`;
+        }
 
         for (var property of this._properties)
         {
-            build += `<th>${property}</th>`;
+            if (property != "$values")
+            {
+                build += `<th>${property}</th>`;
+            }
         }
 
         build += '</tr></thead><tbody>';
 
+        let ind = 0;
         for (var obj of this._objCollection)
         {
             build += `<tr>`;
 
+            if (this._objCollection.length > 1)
+            {
+                build += `<td class='rowIndexHeader'>${ind}</td>`;
+            }
+
             for (var property of this._properties)
             {
-                let formatter = DataFormatter.getFormatter(obj[property]);
+                let formatter : IFormatProvider;
+
+                if (property == "$values")
+                {
+                    formatter = DataFormatter.getFormatter(obj);
+                }
+                else
+                {
+                    formatter = DataFormatter.getFormatter(obj[property]);
+                }
 
                 build += `<td>${formatter.formatToHtml()}</td>`;
+
+                if (property == "$values")
+                {
+                    break;
+                }
             }
 
             build += `</tr>`;
+            ind++;
         }
 
         build += "</tbody></table>";

@@ -7,6 +7,7 @@ import {Theme} from './Config'
 import IFormatProvider from './formatters/IFormatProvider'
 import RawFormatProvider from './formatters/RawFormatProvider'
 import ResourceLocator from './theming/ResourceLocator'
+import { isNullOrUndefined } from 'util';
 
 export default class PadViewContentProvider implements vscode.TextDocumentContentProvider
 {
@@ -26,12 +27,17 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
         this._scripts.push(ResourceLocator.getResource("collapser.js"));
     }
 
-    public setTheme(uri: vscode.Uri, theme: Theme)
+    public setTheme(uri: vscode.Uri, theme: Theme, customTheme: string)
     {
         this._stylesheets = [];
 
         this._stylesheets.push(ResourceLocator.getResource("themes", `${theme}.css`));
         this._stylesheets.push(ResourceLocator.getResource("theme.css"));
+
+        if (!isNullOrUndefined(customTheme))
+        {
+            this._stylesheets.push(customTheme);
+        }
 
         this.update(uri);
     }

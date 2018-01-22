@@ -22,9 +22,16 @@ export default class ObjectFormatProvider implements IFormatProvider
 
     formatToHtml(): string
     {
-        let build = `<h4 class='typeName clickable'>
-            ${this._type.toString(this._style)} <span class='collapse'></span>
-        </h4><table><tbody class='propList'>`;
+        let build = '';
+
+        if (this._style != "none")
+        {
+            build += `<h4 class='typeName clickable'>
+                ${this._type.toString(this._style)} <span class='collapse'></span>
+            </h4>`;
+        }
+
+        build += "<table><tbody class='propList'>";
 
         for (var property in this._targetObj)
         {

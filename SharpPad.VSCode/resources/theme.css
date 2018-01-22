@@ -26,7 +26,7 @@ h1,h2,h3,h4,h5,h6
 
 h4
 {
-    max-width: calc(100% - 135px);
+    max-width: calc(90%);
 }
 
 header
@@ -234,4 +234,11 @@ table .object > table
 .normal
 {
     color: var(--bodyFg);
+}
+
+.rowIndexHeader
+{
+    width: 24px;
+
+    color: var(--null);
 }

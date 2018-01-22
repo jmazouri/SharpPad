@@ -2,7 +2,7 @@
     "name": "sharppad",
     "displayName": "SharpPad",
     "description": "Test snippets of C# code directly from your editor!",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "publisher": "jmazouri",
     "repository": {
         "type": "git",
@@ -17,10 +17,14 @@
         "vscode": "^1.17.0"
     },
     "categories": [
-        "Other" 
+        "Other"
     ],
     "keywords": [
-        "c#", "test", "debug", "dump", "sharp"
+        "c#",
+        "test",
+        "debug",
+        "dump",
+        "sharp"
     ],
     "icon": "icon.png",
     "galleryBanner": {
@@ -72,13 +76,15 @@
                         "shorthand",
                         "normal",
                         "namespaced",
-                        "mixedShorthandNamespaced"
+                        "mixedShorthandNamespaced",
+                        "none"
                     ],
                     "enumDescriptions": [
                         "The shorthand form - Boolean becomes bool, Int32 becomes int, etc - where applicable",
                         "The normal form - Boolean, Int32, etc. Default.",
                         "The namespaced form - System.Boolean, System.Int32, etc",
-                        "Mixed shorthand and namespaced form - System.Boolean becomes bool, but System.Collections.Generic.List remains"
+                        "Mixed shorthand and namespaced form - System.Boolean becomes bool, but System.Collections.Generic.List remains",
+                        "Don't show type names"
                     ],
                     "description": "The style that types should be displayed in."
                 },
@@ -90,10 +96,28 @@
                         "hide"
                     ],
                     "enumDescriptions": [
-                        "Show the source line, if a title isn't specified",
-                        "Don't ever show the source line"
+                        "Normal - Show the source line, if a title isn't specified",
+                        "Normal - Don't ever show the source line"
                     ],
-                    "description": "Whether the source line for a dump should be displayed (if there is no title)."
+                    "description": "How dump titles should be formatted"
+                },
+                "sharppad.dumpDisplayStyle": {
+                    "type": "string",
+                    "default": "full",
+                    "enum": [
+                        "full",
+                        "single"
+                    ],
+                    "enumDescriptions": [
+                        "Show all extra information & padding",
+                        "Single-Line - No padding or extra info"
+                    ],
+                    "description": "How dumps should be displayed in the output window"
+                },
+                "sharppad.customThemePath": {
+                    "type": "string",
+                    "default": null,
+                    "description": "URI to a custom theme css file. If unset, defaults to regular theme setting. Local files need file:/// prefix."
                 }
             }
         },
@@ -112,8 +136,8 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.5.3",
-        "vscode": "^1.1.5",
+        "typescript": "^2.6.2",
+        "vscode": "^1.1.10",
         "@types/node": "^7.0.43",
         "@types/mocha": "^2.2.42"
     },

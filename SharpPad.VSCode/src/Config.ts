@@ -1,6 +1,6 @@
 import {WorkspaceConfiguration} from 'vscode'
 import {TypeNameStyle} from './parsers/TypeName'
-import {DumpSourceStyle} from './formatters/DumpContainerFormatProvider'
+import {DumpSourceStyle, DumpDisplayStyle} from './formatters/DumpContainerFormatProvider'
 
 export type Theme = "dark" | "light";
 
@@ -10,16 +10,20 @@ export default class Config
     {
         this.listenServerPort = config.get<number>("listenServerPort");
         this.theme = config.get<Theme>("colorTheme");
+        this.customThemePath = config.get<string>("customThemePath");
         this.typeNameStyle = config.get<TypeNameStyle>("typeNameStyle");
         this.dumpSourceStyle = config.get<DumpSourceStyle>("dumpSourceStyle");
-        this.autoScrollToBottom = config.get<Boolean>("autoScrollToBottom");
-        this.showTimeOnDumps = config.get<Boolean>("showTimeOnDumps");
+        this.dumpDisplayStyle = config.get<DumpDisplayStyle>("dumpDisplayStyle");
+        this.autoScrollToBottom = config.get<boolean>("autoScrollToBottom");
+        this.showTimeOnDumps = config.get<boolean>("showTimeOnDumps");
     }
     
     theme: Theme;
+    customThemePath: string;
     listenServerPort: number;
     typeNameStyle: TypeNameStyle;
     dumpSourceStyle: DumpSourceStyle;
-    autoScrollToBottom: Boolean;
-    showTimeOnDumps: Boolean;
+    dumpDisplayStyle: DumpDisplayStyle;
+    autoScrollToBottom: boolean;
+    showTimeOnDumps: boolean;
 }

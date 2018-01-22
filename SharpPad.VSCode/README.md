@@ -49,6 +49,19 @@ If you'd like to use SharpPad as an output window for your program without runni
 
 ## Release Notes
 
+### 1.0.5
+
+- Added custom theme support 
+    - Set your `sharppad.customThemePath` setting to the URI to a css file
+        - Needs `file:///` prefix for local files
+    - Overrides dark/light setting, but falls back to those values for anything missing (as CSS does)
+    - See resources/themes/dark.css and light.css for examples
+- Added new option for display format - `sharppad.dumpDisplayStyle`
+    - Full (existing functionality), and single-line
+    - Useful for console-like, condensed output
+- Added ability to disable type name display
+- Some small display and output fixes
+
 ### 1.0.0
 
 - Initial release
@@ -56,6 +69,6 @@ If you'd like to use SharpPad as an output window for your program without runni
 ## Hopeful Features
 
 - Better ValueTuple support (if possible)
-- More language-agnostic implementation (to support languages other than C#)
+- More language-agnostic implementation (to support non-CLR languages)
 - More Dump options/inputs
 - Allow dumping raw HTML (works now but not intentionally)

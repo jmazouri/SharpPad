@@ -1,5 +1,5 @@
 import TypeNameShorthands from './TypeNameShorthands';
-export type TypeNameStyle = "namespaced" | "normal" | "shorthand" | "mixedShorthandNamespaced";
+export type TypeNameStyle = "namespaced" | "normal" | "shorthand" | "mixedShorthandNamespaced" | "none";
 
 export default class TypeName
 {

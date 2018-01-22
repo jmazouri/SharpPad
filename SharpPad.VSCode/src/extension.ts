@@ -32,8 +32,9 @@ function startServer()
     DataFormatter.typeNameStyle = config.typeNameStyle;
     DataFormatter.dumpSourceStyle = config.dumpSourceStyle;
     DataFormatter.showTimeOnDumps = config.showTimeOnDumps;
+    DataFormatter.dumpDisplayStyle = config.dumpDisplayStyle;
     
-    provider.setTheme(previewUri, config.theme);
+    provider.setTheme(previewUri, config.theme, config.customThemePath);
     provider.port = config.listenServerPort;
     provider.scrollToBottom = config.autoScrollToBottom;
     

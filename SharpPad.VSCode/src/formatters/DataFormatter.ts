@@ -5,7 +5,7 @@ import ArrayFormatProvider from './ArrayFormatProvider'
 import GridFormatProvider from './GridFormatProvider'
 
 import DumpContainerFormatProvider from './DumpContainerFormatProvider'
-import {DumpSourceStyle} from './DumpContainerFormatProvider'
+import {DumpSourceStyle, DumpDisplayStyle} from './DumpContainerFormatProvider'
 
 import TypeNameParser from '../parsers/TypeNameParser'
 import {TypeNameStyle} from '../parsers/TypeName'
@@ -14,6 +14,7 @@ export default class DataFormatter
 {
     static typeNameStyle: TypeNameStyle = "normal";
     static dumpSourceStyle: DumpSourceStyle = "show"; 
+    static dumpDisplayStyle: DumpDisplayStyle = "full"; 
     static showTimeOnDumps: Boolean = true;
     
     /*
@@ -25,6 +26,12 @@ export default class DataFormatter
     {      
         if (target !== null && target !== undefined)
         {
+            let typeNameStyle = DataFormatter.typeNameStyle;
+            if (DataFormatter.dumpDisplayStyle == "single")
+            {
+                typeNameStyle = "none";
+            }
+
             /*
                 If the target has a $type property, and it's a DumpContainer, then
                 it's the outer wrapper for a dump, so we recursively call the formatter
@@ -36,7 +43,8 @@ export default class DataFormatter
     
                 if (type.displayName == "DumpContainer")
                 {
-                    return new DumpContainerFormatProvider(target, DataFormatter.dumpSourceStyle, DataFormatter.showTimeOnDumps);
+                    return new DumpContainerFormatProvider(target, DataFormatter.dumpSourceStyle, 
+                        DataFormatter.dumpDisplayStyle, DataFormatter.showTimeOnDumps);
                 }
             }
 
@@ -50,17 +58,17 @@ export default class DataFormatter
                 */
                 if (target.$values.length > 0 && (target.$values[0].$type || typeof target.$values[0] === "object"))
                 {
-                    return new GridFormatProvider(target, DataFormatter.typeNameStyle);
+                    return new GridFormatProvider(target, typeNameStyle);
                 }
                 else
                 {
-                    return new ArrayFormatProvider(target, DataFormatter.typeNameStyle);
+                    return new ArrayFormatProvider(target, typeNameStyle);
                 }
             }
             else if (target.$type)
             {
                 //If it's not an array, but still has a type, it's some other object.
-                return new ObjectFormatProvider(target, DataFormatter.typeNameStyle);
+                return new ObjectFormatProvider(target, typeNameStyle);
             }
         }
 

@@ -14,11 +14,14 @@ export default class SharpPadServer
         this._server = http.createServer((req, res) => this.handleRequest(req, res));
 
         let self = this;
+        this._server.on("error", err => vscode.window.showErrorMessage(`Couldn't start SharpPad listen server: ${err}`));
         this._server.listen(port, function ()
         {
+            let addr = self._server.address();
+
             self._statusBarMessage = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 0);
             self._statusBarMessage.text = `SharpPad:${port}`;
-            self._statusBarMessage.tooltip = `SharpPad server listening on port ${port}`;
+            self._statusBarMessage.tooltip = `SharpPad server listening on ${self.formatAddress()}`;
             self._statusBarMessage.command = "sharppad.showSharpPad";
 
             self._statusBarMessage.show();
@@ -31,6 +34,20 @@ export default class SharpPadServer
         });
         
         this._router.registerRoute("/clear", "GET", (body) => onClear());
+    }
+    
+    private formatAddress()
+    {
+        let addr = this._server.address();
+
+        if (addr.family == "IPv4")
+        {
+            return `${addr.address}:${addr.port}, IPv4`;
+        }
+        else
+        {
+            return `[${addr.address}]:${addr.port}, ${addr.family}`;
+        }
     }
 
     public close(whenDone: Function = () => null)
