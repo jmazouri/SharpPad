@@ -1,0 +1,16 @@
+:root
+{
+    --sansSerifFont: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "HelveticaNeue-Light", "Ubuntu", "Droid Sans", sans-serif;
+    --monoFont: Consolas, "Courier New", monospace;
+
+    --propName: currentColor;
+    --headerFg: currentColor;
+
+    --clearBg: #A92120;
+    --clearHoverBg: #F5302E;
+    --clearFg: #ffffff;
+
+    --buttonBg: #0e639c;
+    --buttonHoverBg: #1177bb;
+    --buttonFg: #ffffff;
+}

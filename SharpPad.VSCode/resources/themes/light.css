@@ -1,12 +1,10 @@
+@import url("base.css");
+
 :root
 {
     --bodyFg: #000000;
     --bodyBg: #ffffff;
 
-    --sansSerifFont: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "HelveticaNeue-Light", "Ubuntu", "Droid Sans", sans-serif;
-    --monoFont: Consolas, "Courier New", monospace;
-
-    --propName: currentColor;
     --typeName: #267f99;
     --string: #a31515;
     --number: #09885a;
@@ -20,12 +18,4 @@
     --headerFg: #ffffff;
 
     --dumpInnerBg: rgb(243, 243, 243);
-
-    --clearBg: #A92120;
-    --clearHoverBg: #F5302E;
-    --clearFg: #ffffff;
-
-    --buttonBg: #0e639c;
-    --buttonHoverBg: #1177bb;
-    --buttonFg: #ffffff;
 }

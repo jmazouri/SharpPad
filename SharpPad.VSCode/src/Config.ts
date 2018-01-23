@@ -2,7 +2,7 @@ import {WorkspaceConfiguration} from 'vscode'
 import {TypeNameStyle} from './parsers/TypeName'
 import {DumpSourceStyle, DumpDisplayStyle} from './formatters/DumpContainerFormatProvider'
 
-export type Theme = "dark" | "light";
+export type Theme = "dark" | "light" | "monokai" | "solarized-light";
 
 export default class Config
 {

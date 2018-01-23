@@ -1,0 +1,20 @@
+@import url("base.css");
+
+:root
+{
+    --bodyFg: rgb(101, 123, 131);
+    --bodyBg: rgb(253, 246, 227);
+
+    --typeName: rgb(181, 137, 0);
+    --string: rgb(42, 161, 152);
+    --number: rgb(42, 161, 152);
+    --null: rgb(147, 161, 161);
+    --bool: rgb(113, 154, 7);
+
+    --collectionBorder: rgb(147, 161, 161);
+    --dumpBorder: rgb(147, 161, 161);
+
+    --headerBg: rgb(238, 232, 213);
+
+    --dumpInnerBg: rgb(238, 232, 213);
+}

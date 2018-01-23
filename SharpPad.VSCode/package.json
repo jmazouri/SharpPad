@@ -2,7 +2,7 @@
     "name": "sharppad",
     "displayName": "SharpPad",
     "description": "Test snippets of C# code directly from your editor!",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "publisher": "jmazouri",
     "repository": {
         "type": "git",
@@ -61,11 +61,15 @@
                     "default": "dark",
                     "enum": [
                         "dark",
-                        "light"
+                        "light",
+                        "monokai",
+                        "solarized-light"
                     ],
                     "enumDescriptions": [
-                        "The dark theme - matches the default Dark+",
-                        "The light theme - matches the default Light+"
+                        "Dark - matches the default Dark+",
+                        "Light - matches the default Light+",
+                        "Monokai",
+                        "Solarized Light"
                     ],
                     "description": "The color theme for the output window."
                 },
