@@ -213,6 +213,10 @@ function trimLine(line) {
 
 function lineOf(trace) {
   return new Promise((resolve, reject) => {
+    if (!trace && !trace.stack) {
+      return reject()
+    }
+
     stackman.callsites(trace, (error, callsites) => {
       if (error) {
         return reject(error)
