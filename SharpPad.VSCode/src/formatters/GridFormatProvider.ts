@@ -1,9 +1,9 @@
 import IFormatProvider from './IFormatProvider'
 import DataFormatter from './DataFormatter'
 import TypeNameParser from '../parsers/TypeNameParser'
-
 import TypeName from '../parsers/TypeName'
 import {TypeNameStyle} from '../parsers/TypeName'
+import escape from '../escape'
 
 export default class GridFormatProvider implements IFormatProvider
 {
@@ -39,7 +39,7 @@ export default class GridFormatProvider implements IFormatProvider
         if (this._style != "none")
         {
             build += `<h4 class='clickable'>
-                <span class='typeName'>${this._type.toString(this._style)}</span>
+                <span class='typeName'>${escape(this._type.toString(this._style))}</span>
                 <span class='count'>(${this._objCollection.length} items)</span>
                 <span class='collapse'></span>
             </h4>`;
@@ -56,7 +56,7 @@ export default class GridFormatProvider implements IFormatProvider
         {
             if (property != "$values")
             {
-                build += `<th>${property}</th>`;
+                build += `<th>${escape(property)}</th>`;
             }
         }
 

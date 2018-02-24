@@ -1,4 +1,5 @@
 import IFormatProvider from './IFormatProvider'
+import escape from '../escape'
 
 export default class RawFormatProvider implements IFormatProvider
 {
@@ -30,7 +31,7 @@ export default class RawFormatProvider implements IFormatProvider
             if (typeof this._rawData === "string")
             {
                 classes.push('string');
-                display = `"${display}"`;
+                display = `"${escape(display)}"`;
             }
 
             if (typeof this._rawData === "number")
