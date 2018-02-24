@@ -33,6 +33,15 @@ export default class DataFormatter
             }
 
             /*
+                If the target has $type=html and has the corresponding
+                $html property, then we accept it as raw HTML input.
+            */
+            if (target.$type === 'html' && typeof target.$html === 'string')
+            {
+                return new RawFormatProvider(target, true);
+            }
+
+            /*
                 If the target has a $type property, and it's a DumpContainer, then
                 it's the outer wrapper for a dump, so we recursively call the formatter
                 for the value within.
@@ -76,6 +85,6 @@ export default class DataFormatter
             We let RawFormatProvider handle pure null values, or anything else
             we don't recognize.
         */
-        return new RawFormatProvider(target);
+        return new RawFormatProvider(target, false);
     }
 }
