@@ -110,6 +110,12 @@ function convertToObject(value) {
 function getJSON(obj) {
   obj = simplify(obj)
 
+  if (typeof obj === 'number'
+    || typeof obj === 'string'
+    || typeof obj === 'boolean') {
+    return obj
+  }
+
   if (obj instanceof Date) {
     return {
       $type: 'Date, node.js',
@@ -227,12 +233,12 @@ function lineOf(trace) {
         return reject()
       }
 
-      site.sourceContext(1, (error, { line }) => {
+      site.sourceContext(1, (error, result) => {
         if (error) {
           return reject(error)
         }
 
-        resolve(trimLine(line))
+        resolve(trimLine(result.line))
       })
     })
   })
