@@ -30,6 +30,7 @@ export default class RawFormatProvider implements IFormatProvider
             if (typeof this._rawData === "string")
             {
                 classes.push('string');
+                display = `"${display}"`;
             }
 
             if (typeof this._rawData === "number")
