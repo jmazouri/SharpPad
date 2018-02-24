@@ -38,7 +38,7 @@ export default class DataFormatter
             */
             if (target.$type === 'html' && typeof target.$html === 'string')
             {
-                return new RawFormatProvider(target, true);
+                return new RawFormatProvider(target.$html, true);
             }
 
             /*
