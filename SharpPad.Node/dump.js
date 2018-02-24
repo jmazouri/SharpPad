@@ -246,6 +246,10 @@ function lineOf(trace) {
 
 function dump(data, title) {
   const value = getJSON(data)
+  if (!dump.source) {
+    return dumpInternal(value, title)
+  }
+
   return lineOf(new Error())
     .then(source => {
       return dumpInternal(value, title, source)
@@ -257,6 +261,10 @@ function dump(data, title) {
 
 function dumpSelf(title) {
   const value = getJSON(this)
+  if (!dump.source) {
+    return dumpInternal(value, title)
+  }
+
   return lineOf(new Error())
     .then(source => {
       return dumpInternal(value, title, source)
@@ -313,6 +321,7 @@ dump.html = function html(htmlString, title) {
 }
 
 dump.port = 5255
+dump.source = true
 
 Object.prototype.dump = dumpSelf
 Number.prototype.dump = dumpSelf
