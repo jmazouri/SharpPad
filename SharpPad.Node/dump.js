@@ -116,6 +116,10 @@ function getJSON(obj) {
     return obj
   }
 
+  if (obj && obj.$dump) {
+    return obj.$dump()
+  }
+
   if (obj instanceof Date) {
     return {
       $type: 'Date, node.js',
