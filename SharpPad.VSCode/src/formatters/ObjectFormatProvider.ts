@@ -1,7 +1,7 @@
 import IFormatProvider from './IFormatProvider'
 import DataFormatter from './DataFormatter'
 import TypeNameParser from '../parsers/TypeNameParser'
-
+import escape from '../escape'
 import TypeName from '../parsers/TypeName'
 import {TypeNameStyle} from '../parsers/TypeName'
 
