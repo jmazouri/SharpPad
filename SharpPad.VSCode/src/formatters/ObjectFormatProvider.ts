@@ -1,7 +1,7 @@
 import IFormatProvider from './IFormatProvider'
 import DataFormatter from './DataFormatter'
 import TypeNameParser from '../parsers/TypeNameParser'
-
+import escape from '../escape'
 import TypeName from '../parsers/TypeName'
 import {TypeNameStyle} from '../parsers/TypeName'
 
@@ -39,7 +39,7 @@ export default class ObjectFormatProvider implements IFormatProvider
             {
                 let formatter = DataFormatter.getFormatter(this._targetObj[property]);
 
-                build += `<tr><th class='propName'>${property}</th><td class='equals'>=</td><td>${formatter.formatToHtml()}</td></tr>`;
+                build += `<tr><th class='propName'>${escape(property)}</th><td class='equals'>=</td><td>${formatter.formatToHtml()}</td></tr>`;
             }
         }
 
