@@ -4,8 +4,11 @@ import * as vscode from 'vscode';
 import DataFormatter from './formatters/DataFormatter'
 import SharpPadServer from './SharpPadServer'
 import Config from './Config'
+import { EventEmitter } from 'events';
 
 import PadViewContentProvider from './padview';
+
+const events = new EventEmitter();
 
 let provider = new PadViewContentProvider();
 let previewUri = vscode.Uri.parse('sharppad://authority/sharppad');
@@ -18,6 +21,7 @@ function showWindow(success = (_) => {})
     vscode.commands
         .executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'SharpPad')
         .then(success, (reason) => vscode.window.showErrorMessage(reason));
+    events.emit('showWindow');
 }
 
 function loadConfig()
@@ -44,6 +48,7 @@ function startServer()
         dump => 
         {   
             provider.addAndUpdate(previewUri, DataFormatter.getFormatter(dump));
+            events.emit('dump', dump);
             
             /*
                 If the debugger is running, try to show a new SharpPad window when
@@ -55,7 +60,10 @@ function startServer()
                 showWindow();
             }
         },
-        clear => provider.clear(previewUri)
+        clear => {
+            provider.clear(previewUri);
+            events.emit('clear');
+        }
     );
 }
 
@@ -106,7 +114,9 @@ export function activate(context: vscode.ExtensionContext)
 
       clear: () => {
         provider.clear(previewUri);
-      }
+      },
+
+      events
     }
 
     //vscode.debug.startDebugging(vscode.workspace.workspaceFolders[0], ".NET Core Launch (console)");
