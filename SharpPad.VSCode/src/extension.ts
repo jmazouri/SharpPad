@@ -110,10 +110,12 @@ export function activate(context: vscode.ExtensionContext)
       
       dump: (data) => {
         provider.addAndUpdate(previewUri, DataFormatter.getFormatter(data));
+        events.emit('dump', data);
       },
 
       clear: () => {
         provider.clear(previewUri);
+        events.emit('clear');
       },
 
       events
