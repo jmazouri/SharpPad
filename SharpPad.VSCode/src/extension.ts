@@ -111,18 +111,32 @@ export function activate(context: vscode.ExtensionContext)
           showWindow(undefined, raiseEvent);
       },
       
-      dump: (data, raiseEvent = false) => {
-          provider.addAndUpdate(previewUri, DataFormatter.getFormatter(data));
+      dump: (data: any, update = true, raiseEvent = false) => {
+          if (update) {
+              provider.addAndUpdate(previewUri, DataFormatter.getFormatter(data));
+          } else {
+              provider.add(DataFormatter.getFormatter(data));
+          }
+
           if (raiseEvent) {
               events.emit('dump', data);
           }
       },
 
-      clear: (raiseEvent = false) => {
-          provider.clear(previewUri);
+      clear: (update = true, raiseEvent = false, message = '') => {
+          if (update) {
+              provider.clear(previewUri, message);
+          } else {
+              provider.clearWithoutUpdate(message);
+          }
+
           if (raiseEvent) {
               events.emit('clear');
           }
+      },
+
+      update: () => {
+          provider.update(previewUri);
       },
 
       events

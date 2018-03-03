@@ -63,6 +63,14 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
         this.update(uri);
     }
 
+    public clearWithoutUpdate(message: string = "") {
+        this._formatters = [];
+        if (message)
+        {
+            this._defaultMessage = message;
+        }
+    }
+
     public clear(uri: vscode.Uri, message: string = "")
     {
         this._formatters = [];
