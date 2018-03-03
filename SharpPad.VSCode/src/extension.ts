@@ -16,12 +16,15 @@ let previewUri = vscode.Uri.parse('sharppad://authority/sharppad');
 let config: Config;
 let server: SharpPadServer;
 
-function showWindow(success = (_) => {})
+function showWindow(success = (_) => {}, raiseEvent = true)
 {
     vscode.commands
         .executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'SharpPad')
         .then(success, (reason) => vscode.window.showErrorMessage(reason));
-    events.emit('showWindow');
+
+    if (raiseEvent) {
+        events.emit('showWindow');
+    }
 }
 
 function loadConfig()
@@ -104,18 +107,20 @@ export function activate(context: vscode.ExtensionContext)
     context.subscriptions.push(registration, disposable);
 
     return {
-      showWindow: () => {
-        showWindow();
+      showWindow: (raiseEvent = false) => {
+        showWindow(undefined, raiseEvent);
       },
       
-      dump: (data) => {
+      dump: (data, raiseEvent = false) => {
         provider.addAndUpdate(previewUri, DataFormatter.getFormatter(data));
         events.emit('dump', data);
       },
 
-      clear: () => {
+      clear: (raiseEvent = false) => {
         provider.clear(previewUri);
-        events.emit('clear');
+        if (raiseEvent) {
+          events.emit('clear');
+        }
       },
 
       events
