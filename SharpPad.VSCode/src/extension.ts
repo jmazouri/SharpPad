@@ -95,6 +95,20 @@ export function activate(context: vscode.ExtensionContext)
 
     context.subscriptions.push(registration, disposable);
 
+    return {
+      showWindow: () => {
+        showWindow();
+      },
+      
+      dump: (data) => {
+        provider.addAndUpdate(previewUri, DataFormatter.getFormatter(data));
+      },
+
+      clear: () => {
+        provider.clear(previewUri);
+      }
+    }
+
     //vscode.debug.startDebugging(vscode.workspace.workspaceFolders[0], ".NET Core Launch (console)");
 }
 
