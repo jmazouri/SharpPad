@@ -108,19 +108,21 @@ export function activate(context: vscode.ExtensionContext)
 
     return {
       showWindow: (raiseEvent = false) => {
-        showWindow(undefined, raiseEvent);
+          showWindow(undefined, raiseEvent);
       },
       
       dump: (data, raiseEvent = false) => {
-        provider.addAndUpdate(previewUri, DataFormatter.getFormatter(data));
-        events.emit('dump', data);
+          provider.addAndUpdate(previewUri, DataFormatter.getFormatter(data));
+          if (raiseEvent) {
+              events.emit('dump', data);
+          }
       },
 
       clear: (raiseEvent = false) => {
-        provider.clear(previewUri);
-        if (raiseEvent) {
-          events.emit('clear');
-        }
+          provider.clear(previewUri);
+          if (raiseEvent) {
+              events.emit('clear');
+          }
       },
 
       events
