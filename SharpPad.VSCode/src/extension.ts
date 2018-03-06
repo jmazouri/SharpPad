@@ -22,7 +22,8 @@ function showWindow(success = (_) => {}, raiseEvent = true)
         .executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'SharpPad')
         .then(success, (reason) => vscode.window.showErrorMessage(reason));
 
-    if (raiseEvent) {
+    if (raiseEvent)
+    {
         events.emit('showWindow');
     }
 }
@@ -63,7 +64,8 @@ function startServer()
                 showWindow();
             }
         },
-        clear => {
+        clear =>
+        {
             provider.clear(previewUri);
             events.emit('clear');
         }
@@ -107,38 +109,50 @@ export function activate(context: vscode.ExtensionContext)
     context.subscriptions.push(registration, disposable);
 
     return {
-      showWindow: (raiseEvent = false) => {
+      showWindow: (raiseEvent = false) =>
+      {
           showWindow(undefined, raiseEvent);
       },
       
-      dump: (data: any, update = true, raiseEvent = false) => {
-          if (update) {
+      dump: (data: any, update = true, raiseEvent = false) =>
+      {
+          if (update)
+          {
               provider.addAndUpdate(previewUri, DataFormatter.getFormatter(data));
-          } else {
+          }
+          else
+          {
               provider.add(DataFormatter.getFormatter(data));
           }
 
-          if (raiseEvent) {
+          if (raiseEvent)
+          {
               events.emit('dump', data);
           }
       },
 
-      clear: (update = true, raiseEvent = false, message = '') => {
-          if (update) {
+      clear: (update = true, raiseEvent = false, message = '') =>
+      {
+          if (update)
+          {
               provider.clear(previewUri, message);
-          } else {
+          }
+          else
+          {
               provider.clearWithoutUpdate(message);
           }
 
-          if (raiseEvent) {
+          if (raiseEvent)
+          {
               events.emit('clear');
           }
       },
 
-      update: () => {
+      update: () =>
+      {
           provider.update(previewUri);
       },
-
+      
       events
     }
 

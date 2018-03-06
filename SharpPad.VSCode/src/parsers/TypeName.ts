@@ -1,4 +1,5 @@
 import TypeNameShorthands from './TypeNameShorthands';
+import escape from '../escape';
 export type TypeNameStyle = "namespaced" | "normal" | "shorthand" | "mixedShorthandNamespaced" | "none";
 
 export default class TypeName
@@ -34,7 +35,7 @@ export default class TypeName
         switch (style)
         {
             case "namespaced":
-                template += this.name;
+                template += escape(this.name);
                 break;
 
             case "mixedShorthandNamespaced":
@@ -54,7 +55,7 @@ export default class TypeName
                 }
                 else
                 {
-                    template += `<span class="keyword">${foundName}</span>`;
+                    template += `<span class="keyword">${escape(foundName)}</span>`;
                 }
 
                 break;

@@ -39,7 +39,7 @@ export default class GridFormatProvider implements IFormatProvider
         if (this._style != "none")
         {
             build += `<h4 class='clickable'>
-                <span class='typeName'>${escape(this._type.toString(this._style))}</span>
+                <span class='typeName'>${this._type.toString(this._style)}</span>
                 <span class='count'>(${this._objCollection.length} items)</span>
                 <span class='collapse'></span>
             </h4>`;
