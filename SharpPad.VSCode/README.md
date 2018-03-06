@@ -35,6 +35,8 @@ Dump nearly anything!
 
 > *ValueTuple support is still quite early; named tuple fields only work correctly at the first layer of nesting, and the special `DumpTuple` method is required for even that. Collections of named tuples are also not supported, and may never be.
 
+You can also dump raw HTML with the `DumpHtml` method. Useful for specialized output formatting, testing HTML templating, or just embedding gifs.
+
 ## How it Works
 
 SharpPad runs a listening HTTP server in your editor. When you call `Dump()` from your code, a request is made to this webserver containing the serialized form of your data. The extension formats this request, and presents it.
@@ -48,6 +50,17 @@ SharpPad, by default, uses its own static HttpClient instance and is entirely as
 If you'd like to use SharpPad as an output window for your program without running it through VSCode, use the `Show SharpPad` command from the Command Palette.
 
 ## Release Notes
+
+### 1.0.6 (Prerelease)
+
+- Initial implementation of raw HTML support on server (thanks @EdonGashi !)
+- Added more base themes
+    - Monokai and Solarized Light
+    - Extracted some base theme variables into a separate file for convenience
+- Added new option for zoom level - `sharppad.zoomLevel`
+    - Can set to any value, in percentage format
+    - Independent + stacks with VSCode zoom level
+    - Useful for presentations and demos
 
 ### 1.0.5
 
@@ -71,4 +84,3 @@ If you'd like to use SharpPad as an output window for your program without runni
 - Better ValueTuple support (if possible)
 - More language-agnostic implementation (to support non-CLR languages)
 - More Dump options/inputs
-- Allow dumping raw HTML (works now but not intentionally)

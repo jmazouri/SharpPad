@@ -4,9 +4,8 @@ import escape from '../escape'
 export default class RawFormatProvider implements IFormatProvider
 {
     private _rawData: any;
-    private _isHtml: boolean;
 
-    constructor(rawData: any, isHtml: boolean)
+    constructor(rawData: any)
     {
         if (rawData === null || rawData === undefined)
         {
@@ -16,8 +15,6 @@ export default class RawFormatProvider implements IFormatProvider
         {
             this._rawData = rawData;
         }
-
-        this._isHtml = isHtml;
     }
 
     formatToHtml(): string
@@ -33,15 +30,8 @@ export default class RawFormatProvider implements IFormatProvider
         {
             if (typeof this._rawData === "string")
             {
-                if (this._isHtml) 
-                {
-                    classes.push('html');
-                }
-                else
-                {
-                    classes.push('string');
-                    display = `"${escape(display)}"`;
-                }
+                classes.push('string');
+                display = `"${escape(display)}"`;
             }
 
             if (typeof this._rawData === "number")

@@ -16,6 +16,7 @@ export default class Config
         this.dumpDisplayStyle = config.get<DumpDisplayStyle>("dumpDisplayStyle");
         this.autoScrollToBottom = config.get<boolean>("autoScrollToBottom");
         this.showTimeOnDumps = config.get<boolean>("showTimeOnDumps");
+        this.zoomLevel = config.get<string>("zoomLevel");
     }
     
     theme: Theme;
@@ -26,4 +27,5 @@ export default class Config
     dumpDisplayStyle: DumpDisplayStyle;
     autoScrollToBottom: boolean;
     showTimeOnDumps: boolean;
+    zoomLevel: string;
 }

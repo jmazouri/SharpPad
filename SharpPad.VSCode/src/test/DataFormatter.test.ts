@@ -8,6 +8,7 @@ import ObjectFormatProvider from '../formatters/ObjectFormatProvider'
 import RawFormatProvider from '../formatters/RawFormatProvider'
 import ArrayFormatProvider from '../formatters/ArrayFormatProvider'
 import GridFormatProvider from '../formatters/GridFormatProvider'
+import HtmlFormatProvider from '../formatters/HtmlFormatProvider';
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("DataFormatter Tests", () =>
@@ -18,6 +19,14 @@ suite("DataFormatter Tests", () =>
         let formatter = DataFormatter.getFormatter(orig);
 
         assert.equal(formatter instanceof RawFormatProvider, true);
+    });
+
+    test("Ensure Formatter for Html", () => 
+    {
+        let orig = {"$type": "html", "$html": "<h1>asdf</h1>"};
+        let formatter = DataFormatter.getFormatter(orig);
+
+        assert.equal(formatter instanceof HtmlFormatProvider, true);
     });
 
     test("Ensure Formatter for Array", () => 

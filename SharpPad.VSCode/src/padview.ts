@@ -2,7 +2,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode'
-import {Theme} from './Config'
+import Config, { Theme } from './Config'
 
 import IFormatProvider from './formatters/IFormatProvider'
 import RawFormatProvider from './formatters/RawFormatProvider'
@@ -16,6 +16,7 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
 
     private _stylesheets: string[] = [];
     private _scripts: string[] = [];
+    private _zoomLevel: string = "100%";
 
     private _defaultMessage = "";
 
@@ -27,17 +28,19 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
         this._scripts.push(ResourceLocator.getResource("collapser.js"));
     }
 
-    public setTheme(uri: vscode.Uri, theme: Theme, customTheme: string)
+    public setConfig(uri: vscode.Uri, config: Config)
     {
         this._stylesheets = [];
 
-        this._stylesheets.push(ResourceLocator.getResource("themes", `${theme}.css`));
+        this._stylesheets.push(ResourceLocator.getResource("themes", `${config.theme}.css`));
         this._stylesheets.push(ResourceLocator.getResource("theme.css"));
 
-        if (!isNullOrUndefined(customTheme))
+        if (!isNullOrUndefined(config.customThemePath))
         {
-            this._stylesheets.push(customTheme);
+            this._stylesheets.push(config.customThemePath);
         }
+
+        this._zoomLevel = config.zoomLevel;
 
         this.update(uri);
     }
@@ -84,6 +87,8 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
             builder += `<link rel='stylesheet' href='${css}'>`;
         }
 
+        builder += `<style type='text/css'>body { zoom: ${this._zoomLevel}; }</style>`;
+
         builder += `<header>
             <div class="left">
                 <button id='clear' class='clear' title='Clear All Dumps'>X</button>
@@ -109,10 +114,11 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
 
         builder += '</div>';
         
+        builder += `<script>window.listenPort = ${this.port};</script>`;
+        builder += `<script>window.scrollToBottom = ${this.scrollToBottom};</script>`;
+        
         for (let js of this._scripts)
         {
-            builder += `<script>window.listenPort = ${this.port};</script>`;
-            builder += `<script>window.scrollToBottom = ${this.scrollToBottom};</script>`;
             builder += `<script src='${js}'></script>`;
         }
 

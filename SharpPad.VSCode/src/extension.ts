@@ -34,7 +34,7 @@ function startServer()
     DataFormatter.showTimeOnDumps = config.showTimeOnDumps;
     DataFormatter.dumpDisplayStyle = config.dumpDisplayStyle;
     
-    provider.setTheme(previewUri, config.theme, config.customThemePath);
+    provider.setConfig(previewUri, config);
     provider.port = config.listenServerPort;
     provider.scrollToBottom = config.autoScrollToBottom;
     
@@ -69,7 +69,7 @@ function restartServer()
 
 export function activate(context: vscode.ExtensionContext)
 {
-    console.log('Congratulations, your extension "sharppad" is now active!');
+    console.log('"SharpPad" is now active! Waiting for debug session...');
     
     startServer();
 

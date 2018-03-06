@@ -3,6 +3,7 @@ import ObjectFormatProvider from './ObjectFormatProvider'
 import RawFormatProvider from './RawFormatProvider'
 import ArrayFormatProvider from './ArrayFormatProvider'
 import GridFormatProvider from './GridFormatProvider'
+import HtmlFormatProvider from './HtmlFormatProvider'
 
 import DumpContainerFormatProvider from './DumpContainerFormatProvider'
 import {DumpSourceStyle, DumpDisplayStyle} from './DumpContainerFormatProvider'
@@ -38,7 +39,7 @@ export default class DataFormatter
             */
             if (target.$type === 'html' && typeof target.$html === 'string')
             {
-                return new RawFormatProvider(target.$html, true);
+                return new HtmlFormatProvider(target.$html);
             }
 
             /*
@@ -85,6 +86,6 @@ export default class DataFormatter
             We let RawFormatProvider handle pure null values, or anything else
             we don't recognize.
         */
-        return new RawFormatProvider(target, false);
+        return new RawFormatProvider(target);
     }
 }

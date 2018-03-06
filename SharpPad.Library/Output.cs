@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -99,6 +100,11 @@ namespace SharpPad
             await DumpInternal(input, title, true);
         }
 
+        public static async Task DumpHtml(this string html, string title = null)
+        {
+            await DumpInternal(html, title, false, "html");
+        }
+
         /// <summary>
         /// Clears the output window.
         /// </summary>
@@ -108,9 +114,20 @@ namespace SharpPad
             await MakeHttpRequest(client => client.GetAsync($"{Endpoint}/clear"));
         }
 
-        internal static async Task DumpInternal(object input, string title, bool withStackTrace)
+        internal static async Task DumpInternal(object input, string title, bool withStackTrace, string rawType = null)
         {
             string serialized;
+
+            if (rawType != null)
+            {
+                Dictionary<string, string> rawData = new Dictionary<string, string>
+                {
+                    ["$type"] = rawType,
+                    ["$html"] = input.ToString()
+                };
+
+                input = JObject.FromObject(rawData);
+            }
 
             serialized = JsonConvert.SerializeObject(new DumpContainer
             {

@@ -73,6 +73,11 @@
                     ],
                     "description": "The color theme for the output window."
                 },
+                "sharppad.zoomLevel": {
+                    "type": "string",
+                    "default": "100%",
+                    "description": "The zoom level for the SharpPad window. Percentage format (ex. \"200%\")."
+                },
                 "sharppad.typeNameStyle": {
                     "type": "string",
                     "default": "shorthand",
