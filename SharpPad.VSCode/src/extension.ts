@@ -4,8 +4,11 @@ import * as vscode from 'vscode';
 import DataFormatter from './formatters/DataFormatter'
 import SharpPadServer from './SharpPadServer'
 import Config from './Config'
+import { EventEmitter } from 'events';
 
 import PadViewContentProvider from './padview';
+
+const events = new EventEmitter();
 
 let provider = new PadViewContentProvider();
 let previewUri = vscode.Uri.parse('sharppad://authority/sharppad');
@@ -13,11 +16,15 @@ let previewUri = vscode.Uri.parse('sharppad://authority/sharppad');
 let config: Config;
 let server: SharpPadServer;
 
-function showWindow(success = (_) => {})
+function showWindow(success = (_) => {}, raiseEvent = true)
 {
     vscode.commands
         .executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'SharpPad')
         .then(success, (reason) => vscode.window.showErrorMessage(reason));
+
+    if (raiseEvent) {
+        events.emit('showWindow');
+    }
 }
 
 function loadConfig()
@@ -44,6 +51,7 @@ function startServer()
         dump => 
         {   
             provider.addAndUpdate(previewUri, DataFormatter.getFormatter(dump));
+            events.emit('dump', dump);
             
             /*
                 If the debugger is running, try to show a new SharpPad window when
@@ -55,7 +63,10 @@ function startServer()
                 showWindow();
             }
         },
-        clear => provider.clear(previewUri)
+        clear => {
+            provider.clear(previewUri);
+            events.emit('clear');
+        }
     );
 }
 
@@ -94,6 +105,42 @@ export function activate(context: vscode.ExtensionContext)
     let registration = vscode.workspace.registerTextDocumentContentProvider('sharppad', provider);
 
     context.subscriptions.push(registration, disposable);
+
+    return {
+      showWindow: (raiseEvent = false) => {
+          showWindow(undefined, raiseEvent);
+      },
+      
+      dump: (data: any, update = true, raiseEvent = false) => {
+          if (update) {
+              provider.addAndUpdate(previewUri, DataFormatter.getFormatter(data));
+          } else {
+              provider.add(DataFormatter.getFormatter(data));
+          }
+
+          if (raiseEvent) {
+              events.emit('dump', data);
+          }
+      },
+
+      clear: (update = true, raiseEvent = false, message = '') => {
+          if (update) {
+              provider.clear(previewUri, message);
+          } else {
+              provider.clearWithoutUpdate(message);
+          }
+
+          if (raiseEvent) {
+              events.emit('clear');
+          }
+      },
+
+      update: () => {
+          provider.update(previewUri);
+      },
+
+      events
+    }
 
     //vscode.debug.startDebugging(vscode.workspace.workspaceFolders[0], ".NET Core Launch (console)");
 }
