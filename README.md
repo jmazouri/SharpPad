@@ -33,7 +33,7 @@ Dump nearly anything!
 - Primitive Types
 - Collections of the above
 
-> *ValueTuple support is still quite early; named tuple fields only work correctly at the first layer of nesting, and the special `DumpTuple` method is required for even that. Collections of named tuples are also not supported, and may never be.
+> *ValueTuple support is limited - named tuple fields only work correctly at the first layer of nesting, and the special `DumpTuple` method is required for even that. Collections of named tuples are also not supported.
 
 You can also dump raw HTML with the `DumpHtml` method. Useful for specialized output formatting, testing HTML templating, or just embedding gifs.
 
@@ -50,6 +50,16 @@ SharpPad, by default, uses its own static HttpClient instance and is entirely as
 If you'd like to use SharpPad as an output window for your program without running it through VSCode, use the `Show SharpPad` command from the Command Palette.
 
 ## Release Notes
+
+### 1.1.0
+
+- Move from deprecated `vscode.previewHtml` command to new Webview API
+- Add "derived" theme, which copies from your active editor theme
+  - Unfortunately, we can't use syntax highlighting colors, so you will have to provide overrides in your custom theme if you don't like the defaults
+- Added `clearOnDebugStart` config option, to toggle whether to clear the SharpPad window when you start debugging in VSCode
+- Improve HTTP router internals
+- Updated package references & minimum vscode version (to `1.32.3`)
+- Enable `"strict"` mode in tsconfig
 
 ### 1.0.6 (Prerelease)
 
