@@ -2,7 +2,7 @@
     "name": "sharppad",
     "displayName": "SharpPad",
     "description": "Test snippets of C# code directly from your editor!",
-    "version": "1.0.6",
+    "version": "1.1.0",
     "publisher": "jmazouri",
     "repository": {
         "type": "git",
@@ -14,7 +14,7 @@
     },
     "license": "MIT",
     "engines": {
-        "vscode": "^1.17.0"
+        "vscode": "^1.32.3"
     },
     "categories": [
         "Other"
@@ -33,13 +33,14 @@
     },
     "activationEvents": [
         "onLanguage:csharp",
-        "onCommand:sharppad.showSharpPad"
+        "onCommand:sharppad.showSharpPad",
+        "onWebviewPanel:sharppad"
     ],
     "main": "./out/extension",
     "contributes": {
         "configuration": {
             "type": "object",
-            "title": "SharpPad configuration",
+            "title": "SharpPad",
             "properties": {
                 "sharppad.listenServerPort": {
                     "type": "number",
@@ -58,18 +59,20 @@
                 },
                 "sharppad.colorTheme": {
                     "type": "string",
-                    "default": "dark",
+                    "default": "derived",
                     "enum": [
                         "dark",
                         "light",
                         "monokai",
-                        "solarized-light"
+                        "solarized-light",
+                        "derived"
                     ],
                     "enumDescriptions": [
                         "Dark - matches the default Dark+",
                         "Light - matches the default Light+",
                         "Monokai",
-                        "Solarized Light"
+                        "Solarized Light",
+                        "Derived from your current editor theme"
                     ],
                     "description": "The color theme for the output window."
                 },
@@ -126,7 +129,12 @@
                 "sharppad.customThemePath": {
                     "type": "string",
                     "default": null,
-                    "description": "URI to a custom theme css file. If unset, defaults to regular theme setting. Local files need file:/// prefix."
+                    "description": "URI to a custom theme css file. If unset, defaults to regular theme setting."
+                },
+                "sharppad.clearOnDebugStart": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Clear the SharpPad window when you start debugging"
                 }
             }
         },
@@ -145,8 +153,8 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.6.2",
-        "vscode": "^1.1.10",
+        "typescript": "^3.3.4000",
+        "vscode": "^1.1.33",
         "@types/node": "^7.0.43",
         "@types/mocha": "^2.2.42"
     },

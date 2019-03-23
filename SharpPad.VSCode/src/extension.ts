@@ -1,31 +1,46 @@
-'use strict';
-
 import * as vscode from 'vscode';
 import DataFormatter from './formatters/DataFormatter'
 import SharpPadServer from './SharpPadServer'
 import Config from './Config'
 import { EventEmitter } from 'events';
 
-import PadViewContentProvider from './padview';
+import PadViewRenderer from './PadViewRenderer';
+import DumpContainer from './DumpContainer';
 
 const events = new EventEmitter();
 
-let provider = new PadViewContentProvider();
-let previewUri = vscode.Uri.parse('sharppad://authority/sharppad');
+let renderer = new PadViewRenderer();
+let panel: vscode.WebviewPanel | null = null;
 
 let config: Config;
 let server: SharpPadServer;
 
-function showWindow(success = (_) => {}, raiseEvent = true)
+function showWindow(raiseEvent = true)
 {
-    vscode.commands
-        .executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'SharpPad')
-        .then(success, (reason) => vscode.window.showErrorMessage(reason));
+    try
+    {
+        if (panel == null)
+        {
+            panel = vscode.window.createWebviewPanel('sharppad', 'SharpPad', vscode.ViewColumn.Beside, 
+            {
+                enableFindWidget: true,
+                enableScripts: true
+            });
+
+            panel.onDidDispose(() => panel = null);
+        }
+    }
+    catch (err)
+    {
+        vscode.window.showErrorMessage(err);
+    }
 
     if (raiseEvent)
     {
         events.emit('showWindow');
     }
+
+    updatePanel();
 }
 
 function loadConfig()
@@ -42,32 +57,34 @@ function startServer()
     DataFormatter.showTimeOnDumps = config.showTimeOnDumps;
     DataFormatter.dumpDisplayStyle = config.dumpDisplayStyle;
     
-    provider.setConfig(previewUri, config);
-    provider.port = config.listenServerPort;
-    provider.scrollToBottom = config.autoScrollToBottom;
-    
+    try
+    {
+        renderer.setConfig(config);
+    }
+    catch (err)
+    {
+        vscode.window.showErrorMessage(`Couldn't load custom SharpPad theme at "${config.customThemePath}"`);
+    }
+
     server = new SharpPadServer
     (
         config.listenServerPort, 
         dump => 
         {   
-            provider.addAndUpdate(previewUri, DataFormatter.getFormatter(dump));
-            events.emit('dump', dump);
+            dumpInternal(dump, true, true);
             
-            /*
-                If the debugger is running, try to show a new SharpPad window when
-                we get a new dump request. We don't do this every time because VSCode
-                will blindly create duplicate windows.
-            */
-            if (vscode.debug.activeDebugSession !== undefined)
+            if (panel == null)
             {
                 showWindow();
             }
+            else
+            {
+                panel.reveal(vscode.ViewColumn.Beside, true);
+            }
         },
-        clear =>
+        () =>
         {
-            provider.clear(previewUri);
-            events.emit('clear');
+            clearInternal(true, true, ' ');
         }
     );
 }
@@ -76,20 +93,64 @@ function restartServer()
 {
     if (server)
     {
-        server.close(done => startServer());
+        server.close(() => startServer());
     }
 }
 
+function updatePanel()
+{
+    if (panel)
+    {
+        panel.webview.html = renderer.render();
+    }
+}
+
+function dumpInternal(dump: DumpContainer, update: boolean = true, raiseEvent: boolean = false)
+{
+    renderer.add(DataFormatter.getFormatter(dump));
+
+    if (update)
+    {
+        updatePanel();
+    }
+
+    if (raiseEvent)
+    {
+        events.emit('dump', dump);
+    }
+}
+
+function clearInternal(update = true, raiseEvent = false, message = '')
+{
+    renderer.clear(message);
+
+    if (update)
+    {
+        updatePanel();
+    }
+
+    if (raiseEvent)
+    {
+        events.emit('clear', message);
+    }
+};
+
 export function activate(context: vscode.ExtensionContext)
 {
-    console.log('"SharpPad" is now active! Waiting for debug session...');
+    console.log('"SharpPad" is now active!');
     
     startServer();
 
     //clear the window when a new debug session starts
     vscode.debug.onDidStartDebugSession(session =>
     {
-        provider.clear(previewUri, "Waiting for dump output...");
+        console.log("Started Debugging");
+        console.log(config);
+        
+        if (config.clearOnDebugStart)
+        {
+            renderer.clear("Waiting for dump output...");
+        }
     });
 
     //Restart the server when the config changes - to catch the new port number
@@ -101,59 +162,16 @@ export function activate(context: vscode.ExtensionContext)
     //Register the command to manually show the SharpPad window, for arbitrary dumping
     var disposable = vscode.commands.registerCommand('sharppad.showSharpPad', () =>
     {
-        showWindow();
+        showWindow(true);
     });
 
-    let registration = vscode.workspace.registerTextDocumentContentProvider('sharppad', provider);
-
-    context.subscriptions.push(registration, disposable);
-
     return {
-      showWindow: (raiseEvent = false) =>
-      {
-          showWindow(undefined, raiseEvent);
-      },
-      
-      dump: (data: any, update = true, raiseEvent = false) =>
-      {
-          if (update)
-          {
-              provider.addAndUpdate(previewUri, DataFormatter.getFormatter(data));
-          }
-          else
-          {
-              provider.add(DataFormatter.getFormatter(data));
-          }
-
-          if (raiseEvent)
-          {
-              events.emit('dump', data);
-          }
-      },
-
-      clear: (update = true, raiseEvent = false, message = '') =>
-      {
-          if (update)
-          {
-              provider.clear(previewUri, message);
-          }
-          else
-          {
-              provider.clearWithoutUpdate(message);
-          }
-
-          if (raiseEvent)
-          {
-              events.emit('clear');
-          }
-      },
-
-      update: () =>
-      {
-          provider.update(previewUri);
-      },
-      
-      events
+        showWindow: showWindow,
+        dump: dumpInternal,
+        clear: clearInternal,
+        update: updatePanel,
+        
+        events
     }
 
     //vscode.debug.startDebugging(vscode.workspace.workspaceFolders[0], ".NET Core Launch (console)");
@@ -165,5 +183,10 @@ export function deactivate()
     if (server)
     {
         server.close();
+    }
+
+    if (panel)
+    {
+        panel.dispose();
     }
 }

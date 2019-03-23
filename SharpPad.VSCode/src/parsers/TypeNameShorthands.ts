@@ -1,4 +1,4 @@
-export default
+const shorthands: {[longName: string]: string} = 
 {
     "System.Boolean": "bool",
     "System.Byte": "byte",
@@ -16,3 +16,5 @@ export default
     "System.UInt16": "ushort",
     "System.String": "string"
 }
+
+export default shorthands;

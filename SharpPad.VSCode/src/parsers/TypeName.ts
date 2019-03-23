@@ -5,7 +5,8 @@ export type TypeNameStyle = "namespaced" | "normal" | "shorthand" | "mixedShorth
 export default class TypeName
 {
     typeParameters: TypeName[] = [];
-    name: string;
+
+    constructor(public name: string) {}
 
     get displayName(): string
     {

@@ -1,0 +1,31 @@
+@import url("base.css");
+
+:root
+{
+    --sansSerifFont: var(--vscode-editor-font-family);
+
+    --clearBg: var(--vscode-inputValidation-errorBackground);
+    --clearFg: var(--vscode-inputValidation-errorForeground);
+    --clearHoverBg: var(--vscode-inputValidation-errorBorder);
+
+    --bodyFg: var(--vscode-editor-foreground);
+    --bodyBg: var(--vscode-editor-background);
+
+    --typeName: var(--vscode-notificationLink-foreground);
+    --string: var(--vscode-inputValidation-warningBorder);
+    --number: var(--vscode-inputValidation-infoBorder);
+    --null: var(--vscode-editorLineNumber-foreground);
+    --bool: var(--vscode-inputValidation-infoBorder);
+
+    --collectionBorder: var(--vscode-sideBar-border);
+
+    --dumpBorder: var(--vscode-editorGroup-border);
+    --headerBg: var(--vscode-sideBar-background);
+    --headerFg: var(--vscode-sideBar-foreground);
+
+    --dumpInnerBg: var(--vscode-editor-lineHighlightBackground);
+
+    --buttonBg: var(--vscode-button-background);
+    --buttonHoverBg: var(--vscode-button-hoverBackground);
+    --buttonFg: var(--vscode-button-foreground);
+}

@@ -12,7 +12,7 @@ export default class TypeNameParser
     //static typeNameParser: P.Parser
     static parse(input: string): TypeName
     {
-        let ret = new TypeName();
+        let ret = new TypeName(input);
 
         let index = -1;
         let rootBlock: Block = new Block();
@@ -54,7 +54,12 @@ export default class TypeNameParser
                         ret.typeParameters.push(currentBlock.typeName);
                     }
                 }
-                currentBlock = currentBlock.parentBlock;
+
+                if (currentBlock.parentBlock != null)
+                {
+                    currentBlock = currentBlock.parentBlock;
+                }
+                
                 --bcount;
             }
             else if (bcount == 0 && c == ',')
@@ -84,10 +89,10 @@ export default class TypeNameParser
 
 class Block
 {
-    iStart: number;
-    iEnd: number;
-    level: number;
-    parentBlock: Block;
+    iStart: number = 0;
+    iEnd: number = 0;
+    level: number = 0;
+    parentBlock: Block | null = null;
     innerBlocks: Block[] = [];
-    typeName: TypeName;
+    typeName: TypeName = new TypeName("");
 }

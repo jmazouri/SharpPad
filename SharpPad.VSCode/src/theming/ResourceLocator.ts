@@ -5,6 +5,8 @@ export default class ResourceLocator
 {
     static getResource(...paths: string[])
     {
-        return vscode.Uri.file(path.join(__dirname, '..', '..', 'resources', ...paths)).toString();
+        return vscode.Uri.file(path.join(__dirname, '..', '..', 'resources', ...paths))
+            .with({scheme: 'vscode-resource'})
+            .toString();
     }
 }

@@ -2,25 +2,42 @@ import {WorkspaceConfiguration} from 'vscode'
 import {TypeNameStyle} from './parsers/TypeName'
 import {DumpSourceStyle, DumpDisplayStyle} from './formatters/DumpContainerFormatProvider'
 
-export type Theme = "dark" | "light" | "monokai" | "solarized-light";
+export type Theme = "dark" | "light" | "monokai" | "solarized-light" | "derived";
 
 export default class Config
 {
+    private _config: WorkspaceConfiguration;
+
     constructor(config: WorkspaceConfiguration)
     {
-        this.listenServerPort = config.get<number>("listenServerPort");
-        this.theme = config.get<Theme>("colorTheme");
-        this.customThemePath = config.get<string>("customThemePath");
-        this.typeNameStyle = config.get<TypeNameStyle>("typeNameStyle");
-        this.dumpSourceStyle = config.get<DumpSourceStyle>("dumpSourceStyle");
-        this.dumpDisplayStyle = config.get<DumpDisplayStyle>("dumpDisplayStyle");
-        this.autoScrollToBottom = config.get<boolean>("autoScrollToBottom");
-        this.showTimeOnDumps = config.get<boolean>("showTimeOnDumps");
-        this.zoomLevel = config.get<string>("zoomLevel");
+        this._config = config;
+
+        this.listenServerPort = this.valueOrDefault("listenServerPort", 5255);
+        this.theme = this.valueOrDefault("colorTheme", "dark");
+        this.customThemePath = this.valueOrDefault("customThemePath", null);
+        this.typeNameStyle = this.valueOrDefault("typeNameStyle", "shorthand");
+        this.dumpSourceStyle = this.valueOrDefault("dumpSourceStyle", "show");
+        this.dumpDisplayStyle = this.valueOrDefault("dumpDisplayStyle", "full");
+        this.autoScrollToBottom = this.valueOrDefault("autoScrollToBottom", false);
+        this.showTimeOnDumps = this.valueOrDefault("showTimeOnDumps", true);
+        this.zoomLevel = this.valueOrDefault("zoomLevel", "100%");
+        this.clearOnDebugStart = this.valueOrDefault("clearOnDebugStart", true);
+    }
+
+    private valueOrDefault<T>(key: string, def: T)
+    {
+        let value = this._config.get<T>(key);
+
+        if (value == undefined)
+        {
+            return def;
+        }
+    
+        return value;
     }
     
     theme: Theme;
-    customThemePath: string;
+    customThemePath: string | null;
     listenServerPort: number;
     typeNameStyle: TypeNameStyle;
     dumpSourceStyle: DumpSourceStyle;
@@ -28,4 +45,6 @@ export default class Config
     autoScrollToBottom: boolean;
     showTimeOnDumps: boolean;
     zoomLevel: string;
+    clearOnDebugStart: boolean;
 }
+

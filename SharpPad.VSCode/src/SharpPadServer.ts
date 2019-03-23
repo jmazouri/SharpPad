@@ -7,9 +7,9 @@ export default class SharpPadServer
 {
     private _server: http.Server;
     private _router = new HttpRouter();
-    private _statusBarMessage: vscode.StatusBarItem;
+    private _statusBarMessage: vscode.StatusBarItem | null = null;
 
-    constructor(port: number, onDump: (dump: DumpContainer) => void, onClear: Function)
+    constructor(port: number, onDump: (dump: DumpContainer) => void, onClear: () => void)
     {
         this._server = http.createServer((req, res) => this.handleRequest(req, res));
 
@@ -27,13 +27,13 @@ export default class SharpPadServer
             self._statusBarMessage.show();
         });
 
-        this._router.registerRoute("/", "POST", (body) => 
+        this._router.registerRoute("/", HttpMethod.Post, (body) => 
         {
             let result: DumpContainer = JSON.parse(body);
             onDump(result);
         });
         
-        this._router.registerRoute("/clear", "GET", (body) => onClear());
+        this._router.registerRoute("/clear", HttpMethod.Get, (body) => onClear());
     }
     
     private formatAddress()
@@ -54,14 +54,18 @@ export default class SharpPadServer
     {
         console.log("Stopping SharpPad server...");
 
-        this._statusBarMessage.dispose();
+        if (this._statusBarMessage)
+        {
+            this._statusBarMessage.dispose();
+        }
+
         this._server.close(() => whenDone());
     }
     
     private handleRequest(req: http.IncomingMessage, res: http.ServerResponse)
     {
         let self = this;
-        let body = [];
+        let body: any[] = [];
         
         req.on('data', (chunk) =>
         {
@@ -71,7 +75,10 @@ export default class SharpPadServer
         {
             let content = Buffer.concat(body).toString();
 
-            self._router.executeRoute(req.url, <HttpMethod>req.method, content);
+            if (req.url)
+            {
+                self._router.executeRoute(req.url, req.method as HttpMethod, content);
+            }
 
             res.statusCode = 200;
             res.end();

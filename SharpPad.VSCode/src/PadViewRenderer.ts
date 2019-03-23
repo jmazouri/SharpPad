@@ -1,6 +1,3 @@
-'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode'
 import Config, { Theme } from './Config'
 
@@ -8,46 +5,45 @@ import IFormatProvider from './formatters/IFormatProvider'
 import RawFormatProvider from './formatters/RawFormatProvider'
 import ResourceLocator from './theming/ResourceLocator'
 import { isNullOrUndefined } from 'util';
+import { readFile, readFileSync } from 'fs';
 
-export default class PadViewContentProvider implements vscode.TextDocumentContentProvider
+export default class PadViewRenderer
 {
     private _formatters: Array<IFormatProvider> = [];
     private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
 
     private _stylesheets: string[] = [];
     private _scripts: string[] = [];
-    private _zoomLevel: string = "100%";
+    private _customStyle: string = "";
+    private _config: Config | null = null;
 
     private _defaultMessage = "";
-
-    public port: Number;
-    public scrollToBottom: Boolean;
 
     constructor()
     {
         this._scripts.push(ResourceLocator.getResource("collapser.js"));
     }
 
-    public setConfig(uri: vscode.Uri, config: Config)
+    public setConfig(config: Config)
     {
         this._stylesheets = [];
 
         this._stylesheets.push(ResourceLocator.getResource("themes", `${config.theme}.css`));
         this._stylesheets.push(ResourceLocator.getResource("theme.css"));
 
-        if (!isNullOrUndefined(config.customThemePath))
+        if (config.customThemePath)
         {
-            this._stylesheets.push(config.customThemePath);
+            let themePath = config.customThemePath;
+
+            if (themePath.startsWith('file:///'))
+            {
+                themePath = themePath.substr(8);
+            }
+
+            this._customStyle = readFileSync(themePath, "utf8");
         }
 
-        this._zoomLevel = config.zoomLevel;
-
-        this.update(uri);
-    }
-
-    get onDidChange(): vscode.Event<vscode.Uri>
-    {
-        return this._onDidChange.event;
+        this._config = config;
     }
 
     public add(formatter: IFormatProvider)
@@ -55,26 +51,7 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
         this._formatters.push(formatter);
     }
 
-    public update(uri: vscode.Uri)
-    {
-        this._onDidChange.fire(uri);
-    }
-
-    public addAndUpdate(uri: vscode.Uri, formatter: IFormatProvider)
-    {
-        this.add(formatter);
-        this.update(uri);
-    }
-
-    public clearWithoutUpdate(message: string = "") {
-        this._formatters = [];
-        if (message)
-        {
-            this._defaultMessage = message;
-        }
-    }
-
-    public clear(uri: vscode.Uri, message: string = "")
+    public clear(message: string = "")
     {
         this._formatters = [];
         
@@ -82,12 +59,12 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
         {
             this._defaultMessage = message;
         }
-
-        this.update(uri);
     }
 
-    provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): vscode.ProviderResult<string>
+    public render(): string
     {
+        if (this._config == null) { return "Error: Config wasn't set."; }
+
         let builder = "";
 
         for (let css of this._stylesheets)
@@ -95,7 +72,7 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
             builder += `<link rel='stylesheet' href='${css}'>`;
         }
 
-        builder += `<style type='text/css'>body { zoom: ${this._zoomLevel}; }</style>`;
+        builder += `<style type='text/css'>body { zoom: ${this._config}; }${this._customStyle}</style>`;
 
         builder += `<header>
             <div class="left">
@@ -122,8 +99,8 @@ export default class PadViewContentProvider implements vscode.TextDocumentConten
 
         builder += '</div>';
         
-        builder += `<script>window.listenPort = ${this.port};</script>`;
-        builder += `<script>window.scrollToBottom = ${this.scrollToBottom};</script>`;
+        builder += `<script>window.listenPort = ${this._config.listenServerPort};</script>`;
+        builder += `<script>window.scrollToBottom = ${this._config.autoScrollToBottom};</script>`;
         
         for (let js of this._scripts)
         {

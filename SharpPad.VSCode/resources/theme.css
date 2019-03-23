@@ -105,7 +105,7 @@ header .right
 .dump
 {
     padding: 0.5em;
-    border-bottom: 2px solid var(--dumpBorder);
+    border-bottom: 1px solid var(--dumpBorder);
 }
 
 .dumpTitle
@@ -113,6 +113,7 @@ header .right
     padding: 0.5em 0.5em 0em 0.5em;
     font-size: 1.25em;
     font-family: var(--sansSerifFont);
+    color: var(--titleFg);
 }
 
 .time

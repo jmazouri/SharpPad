@@ -1,4 +1,4 @@
-export default class DumpContainer
+export default interface DumpContainer
 {
     title: string;
     source: string;

@@ -62,5 +62,5 @@ function setIcon(collapse, isHidden)
 
 if (window.scrollToBottom)
 {
-    document.body.scrollTop = document.body.scrollHeight;
+    window.scrollTo(0, document.body.scrollHeight);
 }
