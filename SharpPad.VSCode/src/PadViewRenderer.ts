@@ -72,7 +72,7 @@ export default class PadViewRenderer
             builder += `<link rel='stylesheet' href='${css}'>`;
         }
 
-        builder += `<style type='text/css'>body { zoom: ${this._config}; }${this._customStyle}</style>`;
+        builder += `<style type='text/css'>.dumpContainer { zoom: ${this._config.zoomLevel}; }${this._customStyle}</style>`;
 
         builder += `<header>
             <div class="left">
