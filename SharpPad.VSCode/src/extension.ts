@@ -6,6 +6,9 @@ import { EventEmitter } from 'events';
 
 import PadViewRenderer from './PadViewRenderer';
 import DumpContainer from './DumpContainer';
+import CellCodeLensProvider from './providers/CellCodeLensProvider';
+
+import * as axios from "axios";
 
 const events = new EventEmitter();
 
@@ -141,6 +144,8 @@ export function activate(context: vscode.ExtensionContext)
     
     startServer();
 
+    vscode.languages.registerCodeLensProvider({language: "csharp", pattern: "**/*.pad.csx"}, new CellCodeLensProvider());
+
     //clear the window when a new debug session starts
     vscode.debug.onDidStartDebugSession(session =>
     {
@@ -163,6 +168,32 @@ export function activate(context: vscode.ExtensionContext)
     var disposable = vscode.commands.registerCommand('sharppad.showSharpPad', () =>
     {
         showWindow(true);
+    });
+
+    vscode.commands.registerCommand('sharppad.executeCell', async (section: string) => 
+    {
+        //console.log(`Executing "${section}"`);
+        
+        try
+        {
+            let result = await axios.default.post("http://localhost:5000/api/execute", {code: section}, {
+                
+            });
+
+            dumpInternal({
+                title: "",
+                source: "",
+                $value: result.data,
+                $type: "DumpContainer"
+            }, true, true);
+
+            vscode.window.showInformationMessage(JSON.stringify(result.data));
+        }
+        catch (err)
+        {
+            vscode.window.showErrorMessage(err.response.data.message);
+            console.error(err);
+        }
     });
 
     return {

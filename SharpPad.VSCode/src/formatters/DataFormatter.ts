@@ -51,7 +51,7 @@ export default class DataFormatter
             {
                 let type = TypeNameParser.parse(target.$type);
     
-                if (type.displayName == "DumpContainer")
+                if (target.$type == "DumpContainer" || type.displayName == "DumpContainer")
                 {
                     return new DumpContainerFormatProvider(target, DataFormatter.dumpSourceStyle, 
                         DataFormatter.dumpDisplayStyle, DataFormatter.showTimeOnDumps);
