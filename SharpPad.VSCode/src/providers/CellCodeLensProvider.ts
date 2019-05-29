@@ -10,6 +10,20 @@ export default class CellCodeLensProvider implements vscode.CodeLensProvider
         let ret: vscode.CodeLens[] = [];
 
         console.log("Generating lenses...");
+        let lenses = this.generateLenses(document);
+
+        return lenses.map(d => {
+            return new vscode.CodeLens(d.range, {
+                title: "Execute Cell", 
+                command:"sharppad.executeCell", 
+                arguments: [d.body]
+            });
+        });
+    }
+
+    generateLenses(document: vscode.TextDocument): {range: vscode.Range, body: string}[]
+    {
+        let ret = [];
 
         for (let i = 0; i < document.lineCount; i++)
         {
@@ -30,11 +44,7 @@ export default class CellCodeLensProvider implements vscode.CodeLensProvider
                     cellLine = document.lineAt(cellLineIndex);
                 }
 
-                ret.push(new vscode.CodeLens(line.range, {
-                    title: "Execute Cell", 
-                    command:"sharppad.executeCell", 
-                    arguments: [cellBody.trim()]
-                }))
+                ret.push({range: line.range.with(undefined, new vscode.Position(cellLineIndex, 0)), body: cellBody.trim()})
 
                 i = cellLineIndex;
             }

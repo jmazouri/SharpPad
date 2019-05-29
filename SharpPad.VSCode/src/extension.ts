@@ -170,30 +170,23 @@ export function activate(context: vscode.ExtensionContext)
         showWindow(true);
     });
 
+    vscode.commands.registerCommand('sharppad.executeCurrentCell', async () =>
+    {
+        let pos = vscode.window.activeTextEditor!.selection.active;
+        let sections = new CellCodeLensProvider().generateLenses(vscode.window.activeTextEditor!.document);
+
+        let foundSection = sections.find(d => d.range.contains(pos));
+
+        if (foundSection)
+        {
+            await execute(foundSection.body);
+        }
+    });
+
     vscode.commands.registerCommand('sharppad.executeCell', async (section: string) => 
     {
         //console.log(`Executing "${section}"`);
-        
-        try
-        {
-            let result = await axios.default.post("http://localhost:5000/api/execute", {code: section}, {
-                
-            });
-
-            dumpInternal({
-                title: "",
-                source: "",
-                $value: result.data,
-                $type: "DumpContainer"
-            }, true, true);
-
-            vscode.window.showInformationMessage(JSON.stringify(result.data));
-        }
-        catch (err)
-        {
-            vscode.window.showErrorMessage(err.response.data.message);
-            console.error(err);
-        }
+        await execute(section);
     });
 
     return {
@@ -206,6 +199,32 @@ export function activate(context: vscode.ExtensionContext)
     }
 
     //vscode.debug.startDebugging(vscode.workspace.workspaceFolders[0], ".NET Core Launch (console)");
+}
+
+async function execute(section: string)
+{
+    try
+    {
+        let result = await axios.default.post("http://localhost:5000/api/execute", {code: section}, {
+            
+        });
+
+        showWindow(false);
+
+        dumpInternal({
+            title: "",
+            source: "",
+            $value: result.data,
+            $type: "DumpContainer"
+        }, true, true);
+
+        vscode.window.showInformationMessage(JSON.stringify(result.data));
+    }
+    catch (err)
+    {
+        vscode.window.showErrorMessage(err.response.data.message);
+        console.error(err);
+    }
 }
 
 // this method is called when your extension is deactivated

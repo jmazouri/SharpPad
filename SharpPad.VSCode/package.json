@@ -142,6 +142,17 @@
             {
                 "command": "sharppad.showSharpPad",
                 "title": "Show SharpPad window"
+            },
+            {
+                "command": "sharppad.executeCurrentCell",
+                "title": "Execute Current Cell"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "sharppad.executeCurrentCell",
+                "key": "ctrl+enter",
+                "when": "editorFocus && !editorHasSelection"
             }
         ]
     },
