@@ -3,6 +3,7 @@
 SharpPad is an extension for Visual Studio Code that allows you easily inspect the results of your code. It works similarly to standalone tools like LinqPad and RoslynPad. 
 
 ![Example](https://i.imgur.com/geOXysP.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjmazouri%2FSharpPad.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjmazouri%2FSharpPad?ref=badge_shield)
 
 ## How to Use
 
@@ -95,3 +96,6 @@ If you'd like to use SharpPad as an output window for your program without runni
 - Better ValueTuple support (if possible)
 - More language-agnostic implementation (to support non-CLR languages)
 - More Dump options/inputs
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjmazouri%2FSharpPad.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjmazouri%2FSharpPad?ref=badge_large)
